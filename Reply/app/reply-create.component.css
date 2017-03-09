@@ -1,0 +1,9 @@
+div.container{
+    width: 80%;
+    background-color: white;
+}
+
+div.my-col-right{
+    text-align: right;
+    background-color: lawngreen;
+}

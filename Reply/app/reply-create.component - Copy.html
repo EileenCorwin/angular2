@@ -1,0 +1,83 @@
+
+<my-header></my-header>
+
+
+<div style="background-color:oldlace;">
+
+    <p>Create a Reply Here</p>
+
+    <!-- Row 1 -->
+    <div style="display: block; display: table; margin:auto; background-color:red; width: 60%">
+
+      <!--<div style="display: table-cell; float: left;">-->
+
+      <div style="display: inline; display: table-cell; margin: auto; background-color:lightblue; text-align: right; width: 20%;">
+          <p>Media Type: </p>
+      </div>
+      
+      <div style="display: inline; display: table-cell; margin: auto; background-color: violet; width: 15%;"> 
+      <div *ngFor="let mediatype of mediatypes">
+          <label><input type="radio" name="type"
+                [class.selected]="mediatype === selectedMediaType"
+                (click)="onSelectType(mediatype)"
+                id={{mediatype.id}}
+                value={{mediatype.id}}>{{mediatype.name}}</label>
+      </div>
+      </div>
+
+      <div style="display: inline; display: table-cell; margin: auto; background-color: aqua; text-align: right; width: 15%">
+          <label>Media Source: </label><br><br>
+          <label>Category: </label><br><br>
+      </div>
+
+     <div class="content-section implementation">
+        <p-autoComplete [(ngModel)]="ac_source" [suggestions]="ac_filteredSources" (completeMethod)="filterSources($event)" field="name" [size]="30"
+        placeholder="Enter a Media Source" [minLength]="1" [dropdown]="true" (onDropdownClick)="handleSourceDropdownClick($event)" [disabled]="acDisabled"></p-autoComplete>        
+     </div>
+
+          <br>
+          <br>
+         
+          <select class="categories">
+            <option value="" disabled="disabled" selected="selected">Please select a Category</option>
+            <option *ngFor="let category of categories"
+              [class.selected]="category === selectedCategory"
+              (click)="onSelectCatergory(category)"
+              value = {{category.id}}>
+              {{category.name}}
+            </option>
+          </select>
+      
+    <!--</div>-->
+    </div>
+    <!-- Row 1 end -->
+
+    <!-- Row 2 -->
+    <div style="display: block; display: table; margin:auto; background-color:yellow; width: 60%; clear: both;">
+    
+        <BR>
+        
+        <div style="display: inline; display: table-cell; margin: auto; background-color:lighgray; text-align: right; width: 20%;">
+            Title: <br><br>
+            Reporter/Author: <br><br>
+            Date: <br><br>
+            Reply: <br>
+        </div>
+       
+        <div style="display: inline; display: table-cell; margin: auto; background-color:brown;">
+            <input type="text" name="title"><br><br>
+            <input type="text" name="author"><br><br>
+            <input type="text" name="reportdate"><br><br>
+            <textarea rows="5" cols="20" style="overflow-y: scroll; resize: none;"></textarea><br><br>
+
+            <input type="submit" value="Submit">
+        </div>
+
+    </div>
+    <!-- Row 2 end -->
+
+
+
+</div>
+
+<my-footer></my-footer>
