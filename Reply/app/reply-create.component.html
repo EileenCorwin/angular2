@@ -31,10 +31,10 @@
             <!--SubRow 1-->
             <div class="row">
             <!--<div style="display: block; display: table; margin:auto; background-color:yellow; width: 60%; clear: both;">-->
-                <div class="col-md-2 my-col-right">
+                <div class="col-md-3 my-col-right">
                     <label>Media Source: </label>
                 </div>
-                <div class="col-md-10">
+                <div class="col-md-9">
                     <div class="content-section implementation">
                         <p-autoComplete [(ngModel)]="ac_source" [suggestions]="ac_filteredSources" (completeMethod)="filterSources($event)" field="name" [size]="30"
                             placeholder="Enter a Media Source" [minLength]="1" [dropdown]="true" (onDropdownClick)="handleSourceDropdownClick($event)" [disabled]="acDisabled">
@@ -46,10 +46,10 @@
            <!--SubRow 2-->
             <div class="row">
             <!--<div style="display: block; display: table; margin:auto; background-color:yellow; width: 60%; clear: both;">-->
-                <div class="col-md-2 my-col-right">
+                <div class="col-md-3 my-col-right">
                     <label>Category: </label>
                 </div>
-                <div class="col-md-10">
+                <div class="col-md-9">
                     <select class="categories">
                         <option value="" disabled="disabled" selected="selected">Please select a Category</option>
                         <option *ngFor="let category of categories"
@@ -96,6 +96,16 @@
         <div class="col-md-10">
             <input type="text" name="reportdate">
         </div>
+
+        <select class="mediasources">
+            <option value="" disabled="disabled" selected="selected">Please select a source</option>
+            <option *ngFor="let mediasource of mediasources"
+              [class.selected]="mediasource === selectedMediaSource"
+              (click)="onSelectSource(mediasource)"
+              value = {{mediasource.id}}>
+              {{mediasource.name}}
+            </option>
+          </select>
     </div><!--Row 4-->
 
     <!--Row 5-->

@@ -31,10 +31,24 @@
       '@angular/router/testing': 'npm:@angular/router/bundles/router-testing.umd.js',
       '@angular/forms/testing': 'npm:@angular/forms/bundles/forms-testing.umd.js',
       // other libraries
+      
       'rxjs':                       'npm:rxjs',
-      'angular2-in-memory-web-api': 'npm:angular2-in-memory-web-api',
 
-      'primeng':                   'npm:primeng'
+      // ORIGINAL - 'angular2-in-memory-web-api': 'npm:angular2-in-memory-web-api',
+      //'angular2-in-memory-web-api': { main: 'core.js', defaultExtension: 'js' },
+      //'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js',
+      //'angular-in-memory-web-api': 'npm:angular-in-memory-web-api',
+      
+
+      'primeng':                   'npm:primeng',
+
+
+      // other libraries
+      // 'rxjs':                      'npm:rxjs@5.0.1',
+      'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js',
+      //'ts':                        'npm:plugin-typescript@5.2.7/lib/plugin.js',
+      'ts':                        'npm:plugin-typescript@4.0.10/lib/plugin.js',
+      'typescript':                'npm:typescript@2.0.10/lib/typescript.js',
 
     },
     // packages tells the System loader how to load when no filename and/or no extension
@@ -52,7 +66,19 @@
       },
       'primeng': { 
           defaultExtension: 'js' 
-      }
+      },
+
+      
+      // 'angular-in-memory-web-api': {
+      //   main: './index.js',
+      //   defaultExtension: 'js'
+      // },
+
+
+      // 'ts': { 
+      //     //main: '.lib/plugin.js',
+      //     defaultExtension: 'js' 
+      // }
      
     }
   });

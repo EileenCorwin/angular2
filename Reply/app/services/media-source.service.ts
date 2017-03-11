@@ -1,28 +1,51 @@
 import { Injectable } from '@angular/core';
+import { Headers, Http } from '@angular/http';
 
-import { MediaType } from '../objects/media-type';
+import 'rxjs/add/operator/toPromise';
+
+import { Observable }     from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 import { MediaSource } from '../objects/media-source';
-import { MEDIASOURCES } from '../mock-data/mock-media-sources';
+// import { MEDIASOURCES } from '../mock-data/mock-media-sources';
 
 @Injectable()
 export class MediaSourceService {
-	
-  getMediaSourcesALL(): MediaSource[] {
-    return MEDIASOURCES;
-  }
+
+  private serviceURL = 'api/mediasources';
+
+  constructor(private http: Http) { }
+
+  // getMediaSourcesALL(): Promise<MediaSource[]> {
+  //   return this.http.get(this.mediasourcesURL)
+  //              .toPromise()
+  //              .then(response => response.json().data as MediaSource[])
+  //              .catch(this.handleError);
+  //   }
+ 
+  getMediaSourcesFiltered(mediaTypeId: number): Promise<MediaSource[]> {
+    const url = `${this.serviceURL}` + "/?mediaTypeId=" + `${mediaTypeId}`;
+    console.log(url); //for testing only
+    return this.http.get(url)
+      .toPromise()
+      .then(response => response.json().data as MediaSource[])
+      .catch(this.handleError);
+    }
+
+  private handleError(error: any): Promise<any> {
+    console.error('An error occurred', error); // for demo purposes only
+    return Promise.reject(error.message || error);
+    }
+
+  //B4 HTTP mock services
+  // getMediaSourcesALL(): MediaSource[] {
+  //   return MEDIASOURCES;
+  // }
 
 
   //   getMediaSourcesALL(): Promise<MediaSource[]> {
   //   return Promise.resolve(MEDIASOURCES);
   // } 
-
-addMediaSource() :void{
-  //MEDIASOURCES.push()
-  var _mediasource: MediaSource = {id: 1, name: 'Television', mediaTypeId: 2};
-    MEDIASOURCES.push(_mediasource)
-
-}
 
 
   /*

@@ -1,8 +1,17 @@
+//Angular modules
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule }   from '@angular/forms';
+import { HttpModule }    from '@angular/http';
+
+// Imports for loading & configuring the in-memory web api
+import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { InMemoryDataService } from './services/in-memory-data.service'; 
+
+//PrimeNG modules
 import { AutoCompleteModule } from 'primeng/primeng';
 
+//App modules
 import { AppComponent }  from './app.component';
 import { HomeComponent }  from './home.component';
 import { HeaderComponent }  from './header.component';
@@ -18,6 +27,8 @@ import { AppRoutingModule }     from './app-routing.module';
     BrowserModule,
     FormsModule,
     AutoCompleteModule,
+    HttpModule,
+    InMemoryWebApiModule.forRoot(InMemoryDataService),
 
     AppRoutingModule
   ],
