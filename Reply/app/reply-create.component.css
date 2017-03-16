@@ -7,3 +7,11 @@ div.my-col-right{
     text-align: right;
     background-color: lawngreen;
 }
+
+.place-holder{
+    color: lightgray;
+}
+
+small.errormsg{
+color: red;
+}
