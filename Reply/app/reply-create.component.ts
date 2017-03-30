@@ -1,28 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'; /* for model form */
 
-
-import { MediaType } from './objects/media-type';
-import { MediaTypeService } from './services/media-type.service'; 
-
-import { MediaSource } from './objects/media-source';
-import { MediaSourceService } from './services/media-source.service'; 
-
-import { Category } from './objects/category';
-import { CategoryService } from './services/category.service'; 
-
-// import { Reply } from './objects/reply'; -- was for template form
-
-/* My Interfaces */
-import { Reply } from './interfaces/IReply.interface';
-
+//Models and Services
+import { MediaType } from './models/media-type';
+import { MediaSource } from './models/media-source';
+import { Category } from './models/category';
+import { Reply } from './models/reply';
+import { DataService } from './services/data.service';  
 
 @Component({
   moduleId: module.id,
   selector: 'my-reply-create',
   templateUrl: './reply-create.component.html',
   styleUrls: [ './reply-create.component.css' ],
-  providers: [MediaTypeService, MediaSourceService, CategoryService]
+  providers: [DataService]
 })
 
 export class ReplyCreateComponent implements OnInit { 
@@ -38,20 +29,17 @@ export class ReplyCreateComponent implements OnInit {
   
  /* Cateogries */
   category: Category;
-  categories: Category[];
+  categories: Category[]=[];
   selectedCategory: Category;
 
-  /* Reply */
-   /* for template form
-   reply: Reply;
-   model = new Reply(null, null, 0, null, null, null);
-   */
+  /* Replies */
+  reply: Reply;
+  replies: Reply[] = [];
 
   /* Model Form stuff */
   public replyForm: FormGroup; // our model driven form
   public submitted: boolean; // keep track on whether form is submitted
   public events: any[] = []; // use later to display form changes
- 
   
   /* PrimeNG variables */
   ac_source: MediaSource;
@@ -59,97 +47,95 @@ export class ReplyCreateComponent implements OnInit {
   ac_filteredSources: any[];
   acDisabled: boolean = true;
 
+  /* Miscellanesou */
   neversubmitted: boolean;
+  errorMessage: string;
 
-
-  // constructor(private mediatypeService: MediaTypeService, private mediasourceService: MediaSourceService, private categoryService: CategoryService) {}
-  constructor(private mediatypeService: MediaTypeService, private mediasourceService: MediaSourceService, private categoryService: CategoryService,
-              private _fb: FormBuilder) {}
+  constructor(private _dataService: DataService, private _fb: FormBuilder) {}
   
-  /* for template form
-  submitted=false;
-  onSubmit() {this.submitted = true;
-  } 
-console.log(this.model); 
-*/
-
-  
-
-  /* internal gets */
+  /******************************/
+  /* Internal GETs, PUTs, POSTs */
+  /******************************/
   getMediaTypes(): void {
-    this.mediatypeService.getMediaTypes().then(mediatypes => this.mediatypes = mediatypes);
+    console.log("in getMediaTypes in component");
+    
+    this._dataService.getMediaTypes().subscribe(mediatypes => this.mediatypes = mediatypes, error => this.errorMessage = <any>error);
+
+    console.log("exiting getMediaTypes in component");
   }
 
   getMediaSourcesFiltered(mediaTypeId: number): void {
-    this.mediasourceService.getMediaSourcesFiltered(mediaTypeId).then(mediasources => this.mediasources = mediasources)
-    }
-  
-  //old way of getting all and then filtering the return set
-  // getMediaSourcesFilteredALLFILTER(id: number): void {
-  //   // this.mediasources = this.mediasourceService.getMediaSourcesALL().filter(mediasource => mediasource.mediaTypeId == id); //B4 Promise
-  //   this.mediasourceService.getMediaSourcesALL().then(mediasources => this.mediasources = mediasources.filter(mediasource => mediasource.mediaTypeId == id));
-  //   }
+    console.log("in getMediaSourcesFiltered in component");
+    
+    this._dataService.getMediaSourcesFiltered(mediaTypeId).subscribe(mediasources => this.mediasources = mediasources, error => this.errorMessage = <any>error);
 
-  getCategories(): void {
-    this.categoryService.getCategories().then(categories => this.categories = categories);
+    console.log("exiting getMediaSourcesFiltered in component");
   }
 
+  getCategories(): void {
+    console.log("in getCategories in component");
+    
+    this._dataService.getCategories().subscribe(categories => this.categories = categories, error => this.errorMessage = <any>error);
+
+    console.log("exiting getCategories in component");
+  }
   
+  getReplies(): void {
+    console.log("in getReplies in component");
+    
+    this._dataService.getReplies().subscribe(replies => this.replies = replies, error => this.errorMessage = <any>error);
+
+    console.log("exiting getReplies in component");
+  }
+  
+  /***********/
   /* On Init */
+  /***********/
   ngOnInit(): void {
-    this.getMediaTypes();
+    this.getMediaTypes(); 
     this.getCategories();
 
+    this.getReplies();
+ 
     this.replyForm = this._fb.group({
         mediaTypeId: ['', <any>Validators.required],
         mediaSourceId: ['', <any>Validators.required],
+        // mediaSourceId: [{value: '', disabled: true}, <any>Validators.required],
         categoryId: ['', <any>Validators.required],
         title: ['', [<any>Validators.required, <any>Validators.minLength(5)]],
         reporter: ['', [<any>Validators.required, <any>Validators.minLength(5)]],
         // articleDate: date,
         replyText: ['', [<any>Validators.required, <any>Validators.minLength(5)]]          
-      }); 
+    }); 
 
-      this.neversubmitted = true;   
+    this.neversubmitted = true;
   }
 
+  /**************/
   /* On Selects */
+  /**************/
   onSelectType(_mediatype: MediaType): void {
     this.selectedMediaType = _mediatype;
     if (this.selectedMediaSource!=null){
       this.selectedMediaSource=null;
-      }
- 
-    this.getMediaSourcesFiltered(this.selectedMediaType.id);
-    // this.mediasourceService.getMediaSourcesFiltered(this.selectedMediaType.id).then(mediasources => this.mediasources = mediasources);
-
-    
-    this.acDisabled = false;
-    this.ac_sources = this.mediasources
     }
 
-//   onSelectSource(_mediasource: MediaSource): void {
-//     this.selectedMediaSource = _mediasource;
-// console.log("onSelectSource");
-// console.log(this.selectedMediaSource);
-// // this.model.mediaSourceId = this.selectedMediaSource.id
-//     }
+    this.getMediaSourcesFiltered(this.selectedMediaType.id);
+console.log("sources: ", this.mediasources);
+
+    this.acDisabled = false;
+    this.ac_sources = this.mediasources
+  }
 
   onSelectSource(_ac_source: MediaSource): void {
     this.ac_source = _ac_source;
-    // this.model.mediaSourceId = this.ac_source.id -- used with template form
     
-console.log("onSelectSource");
-// console.log(this.model.mediaSourceId);
-// this.model.mediaSourceId = this.selectedMediaSource.id
-    }
+    console.log("onSelectSource");
+  }
 
-
-  onSelectCatergory(_category: Category): void {
-    this.selectedCategory = _category;
-    }
-
+  /************************/
   /* PrimeNG AutoComplete */
+  /************************/
   filterSources(event) {
     let ac_found: boolean = false;
     this.ac_sources = this.mediasources
@@ -157,21 +143,21 @@ console.log("onSelectSource");
     
     for(let i = 0; i < this.ac_sources.length; i++) {
         let ac_source = this.ac_sources[i];
-        if(ac_source.name.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
+        if(ac_source.mediaSourceName.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
             this.ac_filteredSources.push(ac_source);
 
             ac_found = true;
             console.log("hit");
-            }
         }
+    }
 
     if (!ac_found) {
       this.ac_sources = this.mediasources;
       this.ac_source = null;
 
       console.log("no hit");
-      }
     }
+  }
    
   handleSourceDropdownClick() {
       this.ac_filteredSources = [];
@@ -181,15 +167,19 @@ console.log("onSelectSource");
           this.ac_filteredSources = this.mediasources;
       }, 100)
     }
-  
+
+  /***************/ 
+  /* Submit Form */ 
+  /***************/ 
   submitForm(model: Reply, isValid: boolean) {
-        this.submitted = true; // set form submit to true
+        // this.submitted = true; // set form submit to true
 
         model.mediaSourceId = this.ac_source.id;
 
         // check if model is valid
         // if valid, call API to save customer
         console.log("save ", model, isValid);
+
     }
 
     buttonClick() {

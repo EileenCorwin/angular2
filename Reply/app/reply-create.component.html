@@ -7,32 +7,25 @@
 
 <div class="container">
 
-<!--<form (ngSubmit)="onSubmit()" #replyForm="ngForm"> used for template form-->
 <form [formGroup]="replyForm" novalidate (ngSubmit)="replyForm.valid && submitForm(replyForm.value, replyForm.valid)">
 
     <!--Row 1-->
     <div class="row">
-    <!--<div style="display: block; display: table; margin:auto; background-color:red; width: 60%">-->
-
+    
         <div class="col-md-2 my-col-right">
-        <!--<div style="display: inline; display: table-cell; margin: auto; background-color:lightblue; text-align: right; width: 20%;">-->
             <p>Media Type: </p>
         </div>
         
         <div class="col-md-3">
-        <!-- <div style="display: inline; display: table-cell; margin: auto; background-color: violet; width: 15%;">--> 
             <div *ngFor="let mediatype of mediatypes">
                 <label><input type="radio" name="mediaTypeId"
                     [class.selected]="mediatype === selectedMediaType"
                     (click)="onSelectType(mediatype)"
                     id={{mediatype.id}}
                     value={{mediatype.id}}
-                    formControlName = "mediaTypeId">{{mediatype.name}}</label>
-            </div>
-            
-            
+                    formControlName = "mediaTypeId">{{mediatype.mediaTypeName}}</label>
+            </div>            
             <small class="errormsg" [hidden]="replyForm.controls.mediaTypeId.valid || (neversubmitted)">
-            <!--<small class="errormsg" [hidden]="replyForm.controls.mediaTypeId.valid || (replyForm.controls.mediaTypeId.pristine && !submitted)">-->
                 Media type required.
             </small>
         </div>
@@ -40,15 +33,14 @@
         <div class="col-md-7">
             <!--SubRow 1-->
             <div class="row">
-            <!--<div style="display: block; display: table; margin:auto; background-color:yellow; width: 60%; clear: both;">-->
                 <div class="col-md-3 my-col-right">
                     <label>Media Source: </label>
                 </div>
                 <div class="col-md-9">
                     <div class="content-section implementation">
-                        <p-autoComplete [(ngModel)]="ac_source" [suggestions]="ac_filteredSources" (completeMethod)="filterSources($event)" field="name" [size]="30"
+                        <p-autoComplete class="autocomplete" id="autocomplete" [(ngModel)]="ac_source" [suggestions]="ac_filteredSources" (completeMethod)="filterSources($event)" field="mediaSourceName" [size]="30"
                             placeholder="Enter a Media Source" [minLength]="1" [dropdown]="true" (onDropdownClick)="handleSourceDropdownClick($event)" [disabled]="acDisabled"
-                            required name="mediaSourceId" (onSelect)="onSelectSource(ac_source)" formControlName="mediaSourceId">
+                            formControlName="mediaSourceId" name="mediaSourceId" (onSelect)="onSelectSource(ac_source)">
                         </p-autoComplete>        
                     </div>
                     <small class="errormsg" [hidden]="ac_source || (neversubmitted)">
@@ -56,21 +48,21 @@
                     </small>
                 </div>
             </div><!--SubRow 1-->
-
-           <!--SubRow 2-->
+            
+            <!--SubRow 2-->
             <div class="row">
-            <!--<div style="display: block; display: table; margin:auto; background-color:yellow; width: 60%; clear: both;">-->
                 <div class="col-md-3 my-col-right">
                     <label>Category: </label>
                 </div>
                 <div class="col-md-9">
-                    <select class="dropdown" formControlName="categoryId">
-                        <option class="place-holder" selected="selected" style=" display: none;">Please select a category</option>
+                    <select class="dropdown" formControlName="categoryId" name="cateogry">
+                        <!--<option class="place_holder" selected="selected" style=" display: none;">Please select a category</option>-->
+                        <option class="place_holder" value = "" selected="selected" >Please select a category</option>
                         <option *ngFor="let category of categories"
                             [class.selected]="category === selectedCategory"
                             (click)="onSelectCatergory(category)"
                             value = {{category.id}}>
-                            {{category.name}}
+                            {{category.categoryName}}
                         </option>
                     </select>
                     <small class="errormsg" [hidden]="replyForm.controls.categoryId.valid || (neversubmitted)">
@@ -79,15 +71,11 @@
                 </div>
             </div><!--SubRow 2-->
         </div>
-
-    <!--</div>-->
     </div><!--Row 1-->
 
     <!--Row 2-->
     <div class="row">
-    <!--<div style="display: block; display: table; margin:auto; background-color:yellow; width: 60%; clear: both;">-->
         <div class="col-md-2 my-col-right">
-        <!--<div style="display: inline; display: table-cell; margin: auto; background-color:lighgray; text-align: right; width: 20%;">-->
             Title:
         </div>
         <div class="col-md-10">
@@ -133,14 +121,21 @@
                 Reply text required (minimum 5 characters).
             </small>
         </div>
-    <!--</div>Row 3-->
-        <!--</div>-->
     </div><!--Row 5-->
 
-    <!--<button type="submit" [disabled]="!replyForm.form.valid">Submit</button> user with template form-->
-    <button type="submit" (click) = "buttonClick()">Submit</button>
-    <!--<button type="submit" [disabled]="!replyForm.valid">Submit</button>-->
 
+    <!-- TEMP-->
+    <div *ngFor="let reply of replies">
+                <label><input type="radio" name="replyText"
+                    
+                    id={{reply.mediaTypeId}}
+                    value={{reply.mediaTypeId}}>{{reply.mediaTypeId}} and {{reply.replyText}}</label>
+            </div>
+    <!-- TEMP-->
+
+
+    <button type="submit" (click) = "buttonClick()">Submit</button>
+    
 </form>
 
 </div><!--container-->

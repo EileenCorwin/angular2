@@ -6,13 +6,14 @@ import 'rxjs/add/operator/toPromise';
 import { Observable }     from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
-import { MediaSource } from '../objects/media-source';
+import { MediaSource } from '../models/media-source';
 // import { MEDIASOURCES } from '../mock-data/mock-media-sources';
 
 @Injectable()
 export class MediaSourceService {
 
-  private serviceURL = 'api/mediasources';
+  // private serviceURL = 'api/mediasources';
+  private serviceURL = 'http://localhost:8081/mediasources';
 
   constructor(private http: Http) { }
 
@@ -24,9 +25,12 @@ export class MediaSourceService {
   //   }
  
   getMediaSourcesFiltered(mediaTypeId: number): Promise<MediaSource[]> {
-    const url = `${this.serviceURL}` + "/?mediaTypeId=" + `${mediaTypeId}`;
-    console.log(url); //for testing only
-    return this.http.get(url)
+    console.log(this.serviceURL); //for testing only
+    return this.http.get(this.serviceURL)
+    
+    // const url = `${this.serviceURL}` + "/?mediaTypeId=" + `${mediaTypeId}`;
+    // console.log(url); //for testing only
+    // return this.http.get(url)
       .toPromise()
       .then(response => response.json().data as MediaSource[])
       .catch(this.handleError);
