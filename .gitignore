@@ -254,4 +254,6 @@ ModelManifest.xml
 # But not these files...
 !systemjs.config.js
 !package.json
+!server.js
+
 Reply/app/services/HEROin-memory-data.service.ts
