@@ -1,6 +1,9 @@
 var express = require('express');
 var sql = require("mssql");
+var bodyParser = require("body-parser");
+
 var app = express();
+app.use(bodyParser.json());
 
 // CORS settings
 var cors = require('cors');
@@ -12,160 +15,177 @@ app.use(function(req, res, next) {
   next();
 });
 
+var config = {
+        user: 'nodejs',
+        password: 'nodejs',
+        server: 'localhost',
+        options: {database: 'MyReply'} 
+};
 
+//NEW GET
 app.get('/mediatypes', function (req, res, next) {
-console.log("mediatypes is calling");   
-    var sql = require("mssql");
+    console.log("mediatypes is calling");
 
-    // config for your database
-    var config = {
-        user: 'nodejs',
-        password: 'nodejs',
-        server: 'localhost',
-        options: {database: 'MyReply'} 
-        };
+    var dbConn = new sql.Connection(config);
 
     // connect to your database
-    sql.connect(config, function (err) {
-        if (err) console.log(err);
-
+    dbConn.connect().then(function () {
         // create Request object
-        var request = new sql.Request();
+        var request = new sql.Request(dbConn);
         
         // query to the database and get the records
-        request.query('select * from mediatype', function (err, recordset) {
+        request.query('select * from mediatype')
+                .then (function (recordset) {
+                    console.log("mediatypes = ", recordset);
+                    res.send(recordset);
+                    dbConn.close();
+                })
+                .catch(function (err) {
+                    console.log(err);
+                    dbConn.close();
+                })
+        .catch(function (err) {
+            console.log(err);
+        });
+    }); // end dbConn.connect(
+}); // end mediatypes      
             
-			if (err) console.log(err);
 
-            // send records as a response
-            res.send(recordset);
-            
-        }); //end of request.query
-		
-		// sql.close();
-		
-    }); //end of sql.connect
-
-    // sql.close();
-
-}); //end of sql.connect
-
-
+// app.get('/mediasources', function (req, res, next) {
 app.get('/mediasources/:mediaTypeId', function (req, res, next) {
+    console.log("mediasources is calling for id = : ", req.params.mediaTypeId); 
 
-console.log("mediasources is calling"); 
-console.log("id = : ", req.params.mediaTypeId);  
-    var sql = require("mssql");
-
-    // config for your database
-    var config = {
-        user: 'nodejs',
-        password: 'nodejs',
-        server: 'localhost',
-        options: {database: 'MyReply'} 
-        };
+    var dbConn = new sql.Connection(config);
 
     // connect to your database
-    sql.connect(config, function (err) {
-        if (err) console.log(err);
-
+    dbConn.connect().then(function () {
         // create Request object
-        var request = new sql.Request();
+        var request = new sql.Request(dbConn);
         
         // query to the database and get the records
-       var mysql = "select * from mediasource where mediaTypeId = " + req.params.mediaTypeId;
-        request.query(mysql, function (err, recordset) {
-        // request.query('select * from mediasource', function (err, recordset) {
-            
-			if (err) console.log(err);
-
-            // send records as a response
-            res.send(recordset);
-            
-        }); //end of request.query
-		
-		// sql.close();
-		
-    }); //end of sql.connect
-
-    // sql.close();
-
-
-}); // end app.get
+        var mysql = "select * from mediasource where mediaTypeId = " + req.params.mediaTypeId; 
+        request.query(mysql)
+                .then (function (recordset) {
+                    console.log("mediasources = ", recordset);
+                    res.send(recordset);
+                    dbConn.close();
+                })
+                .catch(function (err) {
+                    console.log(err);
+                    dbConn.close();
+                })
+        .catch(function (err) {
+            console.log(err);
+        });
+    }); // end dbConn.connect
+}); // end mediasources    
 
 
 app.get('/categories', function (req, res, next) {
-console.log("categories is calling");   
-    var sql = require("mssql");
+    console.log("categories is calling");
 
-    // config for your database
-    var config = {
-        user: 'nodejs',
-        password: 'nodejs',
-        server: 'localhost',
-        options: {database: 'MyReply'} 
-        };
+    var dbConn = new sql.Connection(config);
 
     // connect to your database
-    sql.connect(config, function (err) {
-        if (err) console.log(err);
-
+    dbConn.connect().then(function () {
         // create Request object
-        var request = new sql.Request();
+        var request = new sql.Request(dbConn);
         
         // query to the database and get the records
-        request.query('select * from category', function (err, recordset) {
-            
-			if (err) console.log(err);
+        request.query('select * from category')
+                .then (function (recordset) {
+                    console.log("categories = ", recordset);
+                    res.send(recordset);
+                    dbConn.close();
+                })
+                .catch(function (err) {
+                    console.log(err);
+                    dbConn.close();
+                })
+        .catch(function (err) {
+            console.log(err);
+        });
+    }); // end dbConn.connect(
+}); // end categories      
 
-            // send records as a response
-            res.send(recordset);
-            
-        }); //end of request.query
-        
-    }); //end of sql.connect
-
-    // sql.close();
-
-}); //end of sql.connect
 
 app.get('/replies', function (req, res, next) {
-console.log("replies is calling");   
-    var sql = require("mssql");
+    console.log("replies is calling");
 
-    // config for your database
-    var config = {
-        user: 'nodejs',
-        password: 'nodejs',
-        server: 'localhost',
-        options: {database: 'MyReply'} 
-        };
+    var dbConn = new sql.Connection(config);
 
     // connect to your database
-    sql.connect(config, function (err) {
-        if (err) console.log(err);
-
+    dbConn.connect().then(function () {
         // create Request object
-        var request = new sql.Request();
+        var request = new sql.Request(dbConn);
         
         // query to the database and get the records
-        request.query('select * from reply', function (err, recordset) {
-            
-			if (err) console.log(err);
+        request.query('select * from reply')
+                .then (function (recordset) {
+                    console.log("replies = ", recordset);
+                    res.send(recordset);
+                    dbConn.close();
+                })
+                .catch(function (err) {
+                    console.log(err);
+                    dbConn.close();
+                })
+        .catch(function (err) {
+            console.log(err);
+        });
+    }); // end dbConn.connect(
+}); // end replies      
 
-            // send records as a response
-            res.send(recordset);
-            
-        }); //end of request.query
+
+app.post('/reply', function (req, res, next) {
+    console.log("reply is calling");
+    console.log("req body:", req.body);
+
+    var dbConn = new sql.Connection(config);
+
+    // connect to your database
+    dbConn.connect().then(function () {
+        // create Request object
+        var request = new sql.Request(dbConn);
+
+        // if using SQL 2016 and Json input
+        //request.input('i_JSON', sql.NVarChar(4000), JSON.stringify(myJson));
+
+        // if using SQL 2014 and regular individual inputs
+        request.input('i_mediaTypeId', sql.Int, req.body.mediaTypeId);
+        request.input('i_mediaSourceId', sql.Int, req.body.mediaSourceId);
+        request.input('i_categoryId', sql.Int, req.body.categoryId);
+        request.input('i_title', sql.NVarChar, req.body.title);
+        request.input('i_reporter', sql.NVarChar, req.body.reporter);
+        request.input('i_replyText', sql.NVarChar, req.body.replyText);
         
-    }); //end of sql.connect
+        // request.execute('pInsertReply', function (err, recordsets, returnValue) {
+        // !!not sure about retunrvalue
 
-    // sql.close();
+        // query to the database and get the records
+        request.execute('pInsertReply')
+                .then (function (recordsets, returnValue) {
+                    console.log("reply all= ", recordsets);
+                    console.log("reply 1= ", recordsets[0]);
+                    console.log("reply 2= ", recordsets[1]);
+                    console.log("reply returnValue= ", recordsets.returnValue);
+                    
+                    // res.send(recordsets[0]);
+                    res.send(recordsets[0]);
+                    dbConn.close();
+                })
+                .catch(function (err) {
+                    console.log(err);
+                    dbConn.close();
+                })
+        .catch(function (err) {
+            console.log(err);
+        });
+    }); // end dbConn.connect(
+}); // end reply   
 
-}); //end of sql.connect
 
-
-/* Error message processing */
+/* LISTENING */
 var server = app.listen(8081, function () {
     console.log('Server is running on port 8081..');
-}); //end of listening
+});

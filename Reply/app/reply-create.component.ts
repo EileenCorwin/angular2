@@ -6,6 +6,7 @@ import { MediaType } from './models/media-type';
 import { MediaSource } from './models/media-source';
 import { Category } from './models/category';
 import { Reply } from './models/reply';
+import { SPReturn } from './models/spreturn';
 import { DataService } from './services/data.service';  
 
 @Component({
@@ -36,6 +37,9 @@ export class ReplyCreateComponent implements OnInit {
   reply: Reply;
   replies: Reply[] = [];
 
+  spreturn: SPReturn;
+  spreturns: SPReturn[] = [];
+
   /* Model Form stuff */
   public replyForm: FormGroup; // our model driven form
   public submitted: boolean; // keep track on whether form is submitted
@@ -50,16 +54,31 @@ export class ReplyCreateComponent implements OnInit {
   /* Miscellanesou */
   neversubmitted: boolean;
   errorMessage: string;
+  allDataFetched: boolean = false;
 
   constructor(private _dataService: DataService, private _fb: FormBuilder) {}
   
   /******************************/
   /* Internal GETs, PUTs, POSTs */
   /******************************/
+  //Get Media Types & Categories at same time
+  getAll() {
+    this._dataService.getAll().subscribe(
+                               data => {
+                                  this.mediatypes = data[0]
+                                  this.categories = data[1]
+                               },
+                               error => this.errorMessage = <any>error,
+                               () => console.log ("getAll done"));
+  }
+
   getMediaTypes(): void {
     console.log("in getMediaTypes in component");
     
-    this._dataService.getMediaTypes().subscribe(mediatypes => this.mediatypes = mediatypes, error => this.errorMessage = <any>error);
+    this._dataService.getMediaTypes().subscribe(
+                                      data => this.mediatypes = data, 
+                                      error => this.errorMessage = <any>error,
+                                      () => console.log ("getMediaTypes done"));
 
     console.log("exiting getMediaTypes in component");
   }
@@ -67,7 +86,7 @@ export class ReplyCreateComponent implements OnInit {
   getMediaSourcesFiltered(mediaTypeId: number): void {
     console.log("in getMediaSourcesFiltered in component");
     
-    this._dataService.getMediaSourcesFiltered(mediaTypeId).subscribe(mediasources => this.mediasources = mediasources, error => this.errorMessage = <any>error);
+    this._dataService.getMediaSourcesFiltered(mediaTypeId).subscribe(data => this.mediasources = data, error => this.errorMessage = <any>error);
 
     console.log("exiting getMediaSourcesFiltered in component");
   }
@@ -75,7 +94,10 @@ export class ReplyCreateComponent implements OnInit {
   getCategories(): void {
     console.log("in getCategories in component");
     
-    this._dataService.getCategories().subscribe(categories => this.categories = categories, error => this.errorMessage = <any>error);
+    this._dataService.getCategories().subscribe(
+                                      data => this.categories = data, 
+                                      error => this.errorMessage = <any>error,
+                                      () => console.log ("getCategories done"));
 
     console.log("exiting getCategories in component");
   }
@@ -83,19 +105,35 @@ export class ReplyCreateComponent implements OnInit {
   getReplies(): void {
     console.log("in getReplies in component");
     
-    this._dataService.getReplies().subscribe(replies => this.replies = replies, error => this.errorMessage = <any>error);
+    this._dataService.getReplies().subscribe(data => this.replies = data, 
+                                             error => this.errorMessage = <any>error,
+                                             () => console.log ("getCategories done"));
 
     console.log("exiting getReplies in component");
   }
+
+  postReply(reply: Reply): void {
+    console.log("in postReply in component");
+    
+    this._dataService.postReply(reply).subscribe(data => this.spreturns = data, 
+                                                //  err => {this.errorMessage = <any>err; console.log("ERROR in postReply: "+ err);},
+                                                //  err => console.log("ERROR in postReply: "+ err),
+                                                 err => console.log("ERROR in postReply: ", err),
+                                                 () => console.log ("postReply done", this.spreturns));
+
+    console.log("exiting postReply in component");
+  } 
   
   /***********/
   /* On Init */
   /***********/
   ngOnInit(): void {
+    //this.getAll();
+
     this.getMediaTypes(); 
     this.getCategories();
 
-    this.getReplies();
+    // this.getReplies();
  
     this.replyForm = this._fb.group({
         mediaTypeId: ['', <any>Validators.required],
@@ -175,10 +213,12 @@ console.log("sources: ", this.mediasources);
         // this.submitted = true; // set form submit to true
 
         model.mediaSourceId = this.ac_source.id;
-
+        
         // check if model is valid
         // if valid, call API to save customer
         console.log("save ", model, isValid);
+
+        this.postReply(model);
 
     }
 
