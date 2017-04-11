@@ -1,0 +1,19 @@
+    <div id="div-header">
+        <my-header (setVisibleComponent)="setVisibleComponent($event)"></my-header>
+    </div>
+
+    <div id="mainContent" *ngIf="visibleComponent === 'main'">
+        <my-carousel></my-carousel> 
+    </div>
+
+    <div id="mainContent" *ngIf="visibleComponent === 'list'">
+        <rr-list></rr-list> 
+    </div>
+
+    <div id="mainContent" *ngIf="visibleComponent === 'create'">
+        <rr-create></rr-create> 
+    </div>
+ 
+    <div id="div-footer">
+        <my-footer></my-footer>
+    </div>
