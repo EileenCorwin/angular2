@@ -51,6 +51,34 @@ app.get('/mediatypes', function (req, res, next) {
 }); // end mediatypes      
             
 
+app.get('/mediasources', function (req, res, next) {
+    console.log("mediasources is calling"); 
+
+    var dbConn = new sql.Connection(config);
+
+    // connect to your database
+    dbConn.connect().then(function () {
+        // create Request object
+        var request = new sql.Request(dbConn);
+        
+        // query to the database and get the records
+        request.query('select * from mediasource')
+                .then (function (recordset) {
+                    console.log("mediasources = ", recordset);
+                    res.send(recordset);
+                    dbConn.close();
+                })
+                .catch(function (err) {
+                    console.log(err);
+                    dbConn.close();
+                })
+        .catch(function (err) {
+            console.log(err);
+        });
+    }); // end dbConn.connect
+}); // end mediasources    
+
+
 // app.get('/mediasources', function (req, res, next) {
 app.get('/mediasources/:mediaTypeId', function (req, res, next) {
     console.log("mediasources is calling for id = : ", req.params.mediaTypeId); 
@@ -109,8 +137,39 @@ app.get('/categories', function (req, res, next) {
 }); // end categories      
 
 
+// app.get('/replies', function (req, res, next) {
+//     console.log("replies is calling");
+
+//     var dbConn = new sql.Connection(config);
+
+//     // connect to your database
+//     dbConn.connect().then(function () {
+//         // create Request object
+//         var request = new sql.Request(dbConn);
+        
+//         // query to the database and get the records
+//         request.query('select * from reply')
+//                 .then (function (recordset) {
+//                     console.log("replies = ", recordset);
+//                     res.send(recordset);
+//                     dbConn.close();
+//                 })
+//                 .catch(function (err) {
+//                     console.log(err);
+//                     dbConn.close();
+//                 })
+//         .catch(function (err) {
+//             console.log(err);
+//         });
+//     }); // end dbConn.connect(
+// }); // end replies      
+
 app.get('/replies', function (req, res, next) {
     console.log("replies is calling");
+
+    console.log("mediaTypeId =", req.query.mediaTypeId );
+    console.log("mediaSourceId =", req.query.mediaSourceId );
+    console.log("categoryId =", req.query.categoryId ); 
 
     var dbConn = new sql.Connection(config);
 
@@ -118,12 +177,22 @@ app.get('/replies', function (req, res, next) {
     dbConn.connect().then(function () {
         // create Request object
         var request = new sql.Request(dbConn);
+
+         // if using SQL 2014 and regular individual inputs
+        request.input('i_mediaTypeId', sql.NVarChar, req.query.mediaTypeId);
+        request.input('i_mediaSourceId', sql.NVarChar, req.query.mediaSourceId);
+        request.input('i_categoryId', sql.NVarChar, req.query.categoryId);
         
         // query to the database and get the records
-        request.query('select * from reply')
-                .then (function (recordset) {
-                    console.log("replies = ", recordset);
-                    res.send(recordset);
+        request.execute('pGetReplies')
+                .then (function (recordsets, returnValue) {
+                    console.log("reply all= ", recordsets);
+                    console.log("reply 1= ", recordsets[0]);
+                    // console.log("reply 2= ", recordsets[1]);
+                    console.log("reply returnValue= ", recordsets.returnValue);
+                    
+                    // res.send(recordsets[0]);
+                    res.send(recordsets[0]);
                     dbConn.close();
                 })
                 .catch(function (err) {
@@ -133,7 +202,7 @@ app.get('/replies', function (req, res, next) {
         .catch(function (err) {
             console.log(err);
         });
-    }); // end dbConn.connect(
+    }); // end dbConn.connect    
 }); // end replies      
 
 

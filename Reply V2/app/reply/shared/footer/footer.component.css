@@ -2,7 +2,7 @@
     display: block;
     display: table; 
     margin: auto; 
-    height: 60px;
+    height: 40px;
     width: 100%;
 
     background-color: #555;
@@ -17,10 +17,13 @@
     }
 
   a{
-    color: white;
-    font-size: medium;
+    /*color: white;*/
+    /*color: #cccccc;*/
+    /*font-size: medium;*/
+    font-size: 18px;
     text-decoration: none;
     padding: 15px 20px;
+    color: #cccccc;
     }
 
   a:hover{
@@ -28,4 +31,11 @@
     background-color:white;
     }
     
- 
+/* added this */
+@media (max-width: 767px) {
+  a {
+    font-size: 14px;
+    /*color: red;*/
+    /*line-height: 5px;*/
+  }
+} 

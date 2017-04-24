@@ -5,7 +5,9 @@ import { Component } from '@angular/core';
   selector: 'my-app',
   template: `
     
+    <div class="container-fluid">
     <router-outlet></router-outlet>
+    </div>
     
     `
 })

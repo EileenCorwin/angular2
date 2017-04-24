@@ -53,6 +53,11 @@ export class ReplySharedService {
     return this.mediasources;
   }
 
+  getMediaSourcesFiltered(_mediaTypeId: number) {
+    console.log('in shared getMediaSourcesFiltered:');
+    return this.mediasources.filter(mediasource => mediasource.mediaTypeId == _mediaTypeId)
+  }
+
   getCategories() {
     console.log('in shared getCategories:');
     return this.categories;

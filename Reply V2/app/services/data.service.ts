@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { Http, Response, Headers, RequestOptions, URLSearchParams } from '@angular/http';
 
 /* RxJs */
 import { Observable } from 'rxjs/Observable';
@@ -23,6 +23,7 @@ import { MediaSource } from '../models/media-source';
 import { Category } from '../models/category';
 import { Reply } from '../models/reply';
 import { SPReturn } from '../models/spreturn';
+import { ReplyDisplay } from '../models/reply-display';
 
 @Injectable()
 export class DataService {
@@ -86,12 +87,30 @@ export class DataService {
   }
 
   //Get Replies - Observable
-  getReplies(): Observable<Reply[]> {
-    console.log('getReplies');
-    return this._http.get(Config.webServicesURL + 'replies')
+  // getReplies(): Observable<Reply[]> {
+  getReplies(query: any): Observable<ReplyDisplay[]> {
+    console.log('getReplies in dataservice model = ', query);
+
+// var iParams = {"mediaTypeIds":"1,2,3,6", "mediaSourceIds":"1,2", "categoryIds":"1,2,3,4,5,6"};
+// var iParams = ("mediaTypeIds":"1,2,3,6", "mediaSourceIds":"1,2", "categoryIds":"1,2,3,4,5,6");
+
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    let params: URLSearchParams = new URLSearchParams();
+    for(let key in query){
+      // console.log('key.toString=',key.toString(), ' and value=', query[key]);
+      if (key.toString() != 'reporter') {params.set(key.toString(), query[key]);console.log('key.toString=',key.toString(), ' and value=', query[key]);};
+      // params.set(key.toString(), query[key]);
+    }
+    options.search = params;    
+
+
+    // return this._http.get(Config.webServicesURL + 'replies', {mediaTypeIds:'1,2,3,6', "mediaSourceIds":"1,2", "categoryIds":"1,2,3,4,5,6"})
+    return this._http.get(Config.webServicesURL + 'replies', options)
               //  .share()
-               .map((res: Response) => <Reply[]>res.json())
-               .do(data => console.log('getReplies: ' + JSON.stringify(data)))
+               .map((res: Response) => <ReplyDisplay[]>res.json())
+               .do(data => console.log('getReplies in dataservice: ' + JSON.stringify(data)))
                .catch(this.handleError);
   }
 

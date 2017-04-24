@@ -1,0 +1,109 @@
+<form [formGroup]="replyForm" novalidate (ngSubmit)="replyForm.valid && submitForm(replyForm.value, replyForm.valid)">
+    
+    <!-- Sidebar Selections -->
+    <div class="gridbox gridmenu">
+        <ul>
+            <div class="menuitem">
+            <li>
+                <label>Media Type: </label>
+                <select class="dropdown" name="mediatype" formControlName = "mediaTypeId"
+                        (ngModel)="selectedMediaType" (ngModelChange)="onSelectType($event)">
+                    <option class="place_holder" value = "" selected="selected" >Please select a media type</option>
+                    <option *ngFor="let mediatype of mediatypes"
+                        [class.selected]="mediatype === selectedMediaType"
+                        value = {{mediatype.id}}>
+                        {{mediatype.mediaTypeName}}
+                    </option>
+                </select>
+                <div>
+                <small class="errormsg" [hidden]="replyForm.controls.mediaTypeId.valid || (neversubmitted)">
+                    Media type required.
+                </small>
+                </div> 
+            </li>
+            </div>
+
+            <div class="menuitem">
+            <li>
+                <label>Media Source: </label>
+                <!--<div class="content-section implementation">-->
+                    <p-autoComplete class="autocomplete" id="autocomplete" [(ngModel)]="ac_source" [suggestions]="ac_filteredSources" (completeMethod)="filterSources($event)" field="mediaSourceName" [size]="30"
+                        placeholder="Enter a Media Source" [minLength]="1" [dropdown]="true" (onDropdownClick)="handleSourceDropdownClick($event)" [disabled]="acDisabled"
+                        name="mediaSourceId" formControlName="mediaSourceId"
+                        (onSelect)="onSelectSource(ac_source)">
+                    </p-autoComplete>        
+                <!--</div>-->
+                <div>
+                <small class="errormsg" [hidden]="ac_source || (neversubmitted)">
+                    Media source required.
+                </small>
+                </div>
+            </li>
+            </div>
+
+            <div class="menuitem">
+            <li>
+                <label>Category: </label>
+                <select class="dropdown" name="cateogry" formControlName="categoryId"
+                        (ngModel)="selectedCategory" (ngModelChange)="onSelectCatergory($event)">
+                    <option class="place_holder" value = "" selected="selected" >Please select a category</option>
+                    <option *ngFor="let category of categories"
+                        value = {{category.id}}>
+                        {{category.categoryName}}
+                    </option>
+                </select>
+                <div>
+                <small class="errormsg" [hidden]="replyForm.controls.categoryId.valid || (neversubmitted)">
+                    Category required.
+                </small>
+                </div>
+            </li>
+            </div>
+
+            <div class="menuitem">
+            <li>
+                <label>Reporter/Author: </label>
+                <input type="text" formControlName="reporter">
+                <div>
+                <small class="errormsg" [hidden]="replyForm.controls.reporter.valid || (neversubmitted)">
+                    Reporter required (minimum 5 characters).
+                </small>
+                </div>            
+            </li>
+            </div>
+            
+            <div class="menuitem">
+            <li>
+                <label>Date: </label>
+                <input type="text" name="reportdate">
+            </li>
+            </div>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="gridbox gridmain">
+        <div class="main">
+            <div>
+            <label>Title: </label>      
+            <input type="text" formControlName="title">
+            <small class="errormsg" [hidden]="replyForm.controls.title.valid || (neversubmitted)">
+                Title required (minimum 5 characters).
+            </small>
+            </div>
+
+            <div>
+            <label>Reply: </label>
+            <textarea rows="20" cols="100" style="overflow-y: scroll; resize: none;" formControlName="replyText"></textarea>
+            <small class="errormsg" [hidden]="replyForm.controls.replyText.valid || (neversubmitted)">
+                Reply text required (minimum 5 characters).
+            </small>
+            </div>
+
+            <button type="submit" (click) = "buttonClick()">Submit</button>
+        </div>
+    </div>
+
+</form>
+
+

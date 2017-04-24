@@ -1,19 +1,33 @@
-    <div id="div-header">
-        <my-header (setVisibleComponent)="setVisibleComponent($event)"></my-header>
-    </div>
+<div class="gridcontainer">
+    <div class="gridwrapper">
 
-    <div id="mainContent" *ngIf="visibleComponent === 'main'">
-        <my-carousel></my-carousel> 
-    </div>
+        <!-- Header -->
+        <!--<div class="gridbox gridheader">-->
+        <div class="gridheader">
+            <div class="header">
+                <my-header (setVisibleComponent)="setVisibleComponent($event)"></my-header>
+            </div>
+        </div>
+         
+        <!-- Main Content -->
+        <div id="mainContent" *ngIf="visibleComponent === 'main'">
+            <my-carousel></my-carousel> 
+        </div>
 
-    <div id="mainContent" *ngIf="visibleComponent === 'list'">
-        <rr-list></rr-list> 
-    </div>
+        <div id="mainContent" *ngIf="visibleComponent === 'list'">
+            <my-list></my-list> 
+        </div>
 
-    <div id="mainContent" *ngIf="visibleComponent === 'create'">
-        <rr-create></rr-create> 
+        <div id="mainContent" *ngIf="visibleComponent === 'create'">
+            <my-create (setVisibleComponent)="setVisibleComponent($event)"></my-create> 
+        </div>
+        
+        <!-- Footer -->
+        <div class="gridbox gridfooter">
+            <div class="footer">
+                <my-footer></my-footer>
+            </div>
+        </div>
+
     </div>
- 
-    <div id="div-footer">
-        <my-footer></my-footer>
-    </div>
+</div>

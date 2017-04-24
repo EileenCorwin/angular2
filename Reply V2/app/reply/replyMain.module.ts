@@ -6,6 +6,8 @@ import { HttpModule }    from '@angular/http';
 
 //PrimeNG modules
 import { AutoCompleteModule } from 'primeng/primeng';
+import {AccordionModule} from 'primeng/primeng';
+import {SharedModule} from 'primeng/primeng';
 
 //App components
 import { HeaderComponent }  from './shared/header/header.component';
@@ -23,7 +25,7 @@ import { ReplyMainComponent } from './replyMain.component';
     FormsModule, ReactiveFormsModule,
     HttpModule,
     
-    AutoCompleteModule
+    AutoCompleteModule, AccordionModule, SharedModule
   ],
   declarations: [
     ReplyMainComponent,

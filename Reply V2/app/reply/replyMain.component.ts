@@ -6,9 +6,9 @@ import { ReplySharedService } from '../services/replyShared.service';
 
 @Component({
   moduleId: module.id,
-  selector: 'rr-main',
+  selector: 'my-main',
   templateUrl: './replyMain.component.html',
-  styleUrls: [ './replyMain.component.css' ],
+  styleUrls: [ './replyMain.component.css', './shared/replyShared.css' ],
 
   providers: [DataService, ReplySharedService]
 })

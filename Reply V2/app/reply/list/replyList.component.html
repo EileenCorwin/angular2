@@ -1,0 +1,163 @@
+<form [formGroup]="replyForm" novalidate (ngSubmit)="replyForm.valid && submitForm(replyForm.value, replyForm.valid)">
+
+    <!-- Sidebar Selections -->
+    <div class="gridbox gridmenu">
+
+        <!-- Search Button -->
+        <div style="float: right">
+            <button type="submit" class="btn btn-default btn-sm" (click) = "buttonClick()">
+                <span class="glyphicon glyphicon-search"></span> 
+            </button>
+        </div>
+
+        <ul>
+            <div class="menuitem">
+            <li>
+                <label>Media Type: </label>
+                <select class="dropdown" name="mediatype" formControlName = "mediaTypeId"
+                        (ngModel)="selectedMediaType" (ngModelChange)="onSelectType($event)">
+                    <option class="place_holder" value = "" selected="selected" >Please select a media type</option>
+                    <option *ngFor="let mediatype of mediatypes"
+                        [class.selected]="mediatype === selectedMediaType"
+                        value = {{mediatype.id}}>
+                        {{mediatype.mediaTypeName}}
+                    </option>
+                </select>
+                <div>
+                <small class="errormsg" [hidden]="replyForm.controls.mediaTypeId.valid || (neversubmitted)">
+                    Media type required.
+                </small>
+                </div> 
+            </li>
+            </div>
+
+            <div class="menuitem">
+            <li>
+                <label>Media Source: </label>
+                <!--<div class="content-section implementation">-->
+                    <p-autoComplete class="autocomplete" id="autocomplete" [(ngModel)]="ac_source" [suggestions]="ac_filteredSources" (completeMethod)="filterSources($event)" field="mediaSourceName" [size]="30"
+                        placeholder="Enter a Media Source" [minLength]="1" [dropdown]="true" (onDropdownClick)="handleSourceDropdownClick($event)" [disabled]="acDisabled"
+                        name="mediaSourceId" formControlName="mediaSourceId"
+                        (onSelect)="onSelectSource(ac_source)">
+                    </p-autoComplete> 
+
+                <!--</div>-->
+                <div>
+                <small class="errormsg" [hidden]="ac_source || (neversubmitted)">
+                    Media source required.
+                </small>
+                </div>
+            </li>
+            </div>
+
+            <div class="menuitem">
+            <li>
+                <label>Category: </label>
+                <select class="dropdown" name="cateogry" formControlName="categoryId"
+                        (ngModel)="selectedCategory" (ngModelChange)="onSelectCatergory($event)">
+                    <option class="place_holder" value = "" selected="selected" >Please select a category</option>
+                    <option *ngFor="let category of categories"
+                        value = {{category.id}}>
+                        {{category.categoryName}}
+                    </option>
+                </select>
+                <div>
+                <small class="errormsg" [hidden]="replyForm.controls.categoryId.valid || (neversubmitted)">
+                    Category required.
+                </small>
+                </div>
+            </li>
+            </div>
+
+            <div class="menuitem">
+            <li>
+                <label>Reporter/Author: </label>
+                <input type="text" formControlName="reporter">
+                <div>
+                <small class="errormsg" [hidden]="replyForm.controls.reporter.valid || (neversubmitted)">
+                    Reporter required (minimum 5 characters).
+                </small>
+                </div>            
+            </li>
+            </div>
+            
+            <div class="menuitem">
+            <li>
+                <label>Date: </label>
+                <input type="text" name="reportdate">
+            </li>
+            </div>
+        </ul>
+
+        <!-- Search Button -->
+        <div style="float: right">
+            <button type="submit" class="btn btn-default btn-sm" (click) = "buttonClick()">
+                <span class="glyphicon glyphicon-search"></span> 
+            </button>
+        </div>
+    </div>
+</form>
+
+    <!-- Main Content -->
+    <div class="gridbox gridmain">
+        <div class="main">
+            <!-- Basic Messages -->
+            <!--<p>{{neversubmitted}} and {{submitted}}</p>-->
+            <div *ngIf="(neversubmitted)" style="text-align: center">
+                Please make search selections
+            </div>
+
+            <div *ngIf="!replyForm.valid && !(neversubmitted) && !(submitted)" style="text-align: center">
+                Please fixed required fields before submitting
+            </div>
+
+            <div *ngIf="replies == 0 && (submitted)" style="text-align: center">
+                No replies based on search criteria
+            </div>
+            <!-- end - Basic Messages -->
+
+            <div *ngIf="replies != 0">
+            <p-accordion>
+                <div *ngFor="let reply of replies">
+                    <div>
+                        <!-- Header row 1 -->
+                        <div class="divLeft">
+                            <span class="replyLabel">reply by </span> 
+                            <span class="replyValue">Eileen Corwin</span>
+                            <span class="replyLabel">on </span> 
+                            <span class="replyValue">April 1, 2017</span>
+                        </div>
+                    
+                        <div class="divRight">
+                            <span class="replyValue">{{reply.mediaTypeName}} / {{reply.mediaSourceName}} / {{reply.categoryName}}</span> 
+                        </div>
+                    </div>
+
+                    <!-- Header row 2 -->
+                    <div>   
+                        <div class="divLeft">
+                            <span class="replyLabel">article by </span> 
+                            <span class="replyValue">{{reply.reporter}}</span>
+                            <span class="replyLabel">on </span> 
+                            <span class="replyValue">March 1, 2017</span>
+                        </div>   
+                    
+                        <div class="divRight">
+                            <span class="replyValue">BP Oil Spill</span> 
+                        </div>
+                    </div>
+                    
+                    <!-- actual accordion -->
+                    <p-accordionTab>
+                        <p-header>
+                            {{reply.title}}
+                        </p-header>
+                        {{reply.replyText}}    
+                    </p-accordionTab>
+
+                    <BR>
+                </div>
+            </p-accordion>
+            </div>
+        </div>
+    </div>
