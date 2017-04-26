@@ -1,0 +1,79 @@
+<div style="background-color: #fffae6;">
+
+<div class="mygrid-container">
+
+    
+    <div class="mygrid-row">
+        <div class="mygrid-left">
+            <label>Media Type: </label>
+        </div>
+        <div class="mygrid-right">
+            <span>{{selectedMediaType.mediaTypeName}}</span>
+        </div>
+    </div>
+                
+    <div class="mygrid-row">
+        <div class="mygrid-left">
+            <label>Media Source: </label>
+        </div>
+        <div class="mygrid-right">
+            <span>{{selectedMediaSource.mediaSourceName}}</span>
+        </div>
+    </div>
+               
+    <div class="mygrid-row">
+        <div class="mygrid-left">
+            <label>Category: </label>
+        </div>
+        <div class="mygrid-right">
+            <span>{{selectedCategory.categoryName}}</span>
+        </div>
+    </div>
+               
+    <div class="mygrid-row">
+        <div class="mygrid-left">
+            <label>Reporter/Author: </label>
+        </div>
+        <div class="mygrid-right">
+            <span>{{reply.reporter}}</span>
+        </div>
+    </div>
+               
+   <div class="mygrid-row">
+        <div class="mygrid-left">
+            <label>Title: </label>
+        </div>
+        <div class="mygrid-right">
+            <span>{{reply.title}}</span>
+        </div>
+    </div>
+               
+   <div class="mygrid-row">
+        <div class="mygrid-left">
+            <label>Reply: </label>
+        </div>
+        <div class="mygrid-right">
+            <span>
+            <textarea readonly rows="20" cols="100" style="overflow-y: scroll; resize: none;">{{reply.replyText}}</textarea>
+            </span>
+        </div>
+    </div>
+               
+   
+ 
+</div>
+
+<div class="mygrid-row-button">
+    <div class="mygrid-left-button">
+        <button type="submit" (click) = "buttonReturnClick()">Return to editing</button>
+    </div>
+    <div class="mygrid-right-button">
+        <button type="submit" (click) = "buttonSaveClick()">Confirm/Save</button>
+    </div>
+</div>
+
+<BR><BR>
+
+</div>
+            
+

@@ -15,6 +15,7 @@ import { FooterComponent }  from './shared/footer/footer.component';
 import { CarouselComponent }  from './shared/carousel/carousel.component';
 import { ReplyListComponent }  from './list/replyList.component';
 import { ReplyCreateComponent }  from './create/replyCreate.component';
+import { ReplyConfirmComponent }  from './confirm/replyConfirm.component';
 
 //Main component for this module
 import { ReplyMainComponent } from './replyMain.component';
@@ -34,7 +35,8 @@ import { ReplyMainComponent } from './replyMain.component';
     FooterComponent,
     CarouselComponent,
     ReplyListComponent,
-    ReplyCreateComponent
+    ReplyCreateComponent,
+    ReplyConfirmComponent
   ],
   exports: [ ReplyMainComponent ]
 })

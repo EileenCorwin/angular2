@@ -11,6 +11,11 @@ import { Category } from '../../models/category';
 import { Reply } from '../../models/reply';
 import { SPReturn } from '../../models/spreturn';
 
+import { MediaTypePlaceHolder } from '../../models/media-type';
+import { MediaSourceInit } from '../../models/media-source';
+import { CategoryPlaceHolder } from '../../models/category';
+import { ReplyInitialize } from '../../models/reply';
+
 @Component({
   moduleId: module.id,
   selector: 'my-create',
@@ -31,7 +36,6 @@ export class ReplyCreateComponent implements OnInit {
 
   /* Replies */
   reply: Reply;
-  replies: Reply[] = [];
 
   spreturn: SPReturn;
   spreturns: SPReturn[] = [];
@@ -42,12 +46,15 @@ export class ReplyCreateComponent implements OnInit {
   public events: any[] = []; 
 
   /* PrimeNG variables */
-  ac_source: MediaSource;
+  ac_source: MediaSource = MediaSourceInit;
   ac_sources: MediaSource[]=[];
   ac_filteredSources: any[];
   acDisabled: boolean = true;
 
   /* Miscellaneous */
+  selectedMediaType: MediaType;
+  selectedCategory: Category;
+
   selectedMediaTypeId: number;
   selectedMediaSource: MediaSource = null;
   selectedCategoryId: number;
@@ -61,20 +68,52 @@ export class ReplyCreateComponent implements OnInit {
   /* On Init */
   /***********/
   ngOnInit(): void {
-    this.mediatypes = this._rss.getMediaTypes();
-    console.log('in constructor replyCreate aft  in ngOnInit>= ', this.mediatypes);
-    
-    this.categories = this._rss.getCategories();
-    console.log('in constructor replyCreate aft  in ngOnInit>= ', this.categories);
+    /* initialize mediatypes */
+    this.mediatypes = this._rss.mediatypes;
+    // this.selectedMediaType = this._rss.selectedMediaType_Create;
+    this.selectedMediaTypeId = this._rss.selectedMediaTypeId_Create;
+    // add placeholder if no selection made and placeholder not there (auto-updates shared recordset)
+    if (!this.selectedMediaTypeId && this.mediatypes[0].id != -1) {
+      this.mediatypes.unshift(MediaTypePlaceHolder);
+      this.selectedMediaTypeId = this.mediatypes[0].id;
+    }
+    // remove placeholder if selection made and placeholder there (auto-updates shared recordset)
+    else if (this.selectedMediaTypeId && this.mediatypes[0].id === -1) {
+      this.mediatypes.shift();
+    }
 
+    /* initialize mediasources */
+    //nothing happens yet with the control
+    if (this._rss.selectedMediaSource_Create) {
+      this.ac_source = this._rss.selectedMediaSource_Create;
+    }
+    
+    /* initialize categories */
+    this.categories = this._rss.categories;
+    // this.selectedCategory = this._rss.selectedCategory_Create;
+    this.selectedCategoryId = this._rss.selectedCategoryId_Create;
+    // add placeholder if no selection made and placeholder not there (auto-updates shared recordset)
+    if (!this.selectedCategoryId && this.categories[0].id != -1) {
+      this.categories.unshift(CategoryPlaceHolder);
+      this.selectedCategoryId = this.categories[0].id;
+    }
+    // remove placeholder if selection made and placeholder there (auto-updates shared recordset)
+    else if (this.selectedCategoryId && this.categories[0].id === -1) {
+      this.categories.shift();
+    }
+
+    /* initialize reply form */
+    this.reply = this._rss.reply;
+    if (!this.reply) {this.reply = ReplyInitialize}; // initialize if empty
     this.replyForm = this._fb.group({
-      mediaTypeId: ['', <any>Validators.required],
-      mediaSourceId: ['', <any>Validators.required],
-      categoryId: ['', <any>Validators.required],
-      title: ['', [<any>Validators.required, <any>Validators.minLength(5)]],
-      reporter: ['', [<any>Validators.required, <any>Validators.minLength(5)]],
+      // mediaTypeId: ['', <any>Validators.required],
+      mediaTypeId: [this.reply.mediaTypeId, <any>Validators.required],
+      mediaSourceId: [this.reply.mediaSourceId, <any>Validators.required],
+      categoryId: [this.reply.categoryId, <any>Validators.required],
+      title: [this.reply.title, [<any>Validators.required, <any>Validators.minLength(5)]],
+      reporter: [this.reply.reporter, [<any>Validators.required, <any>Validators.minLength(5)]],
       // articleDate: date,
-      replyText: ['', [<any>Validators.required, <any>Validators.minLength(5)]]          
+      replyText: [this.reply.replyText, [<any>Validators.required, <any>Validators.minLength(5)]]          
     }); 
 
     this.neversubmitted = true;
@@ -83,9 +122,15 @@ export class ReplyCreateComponent implements OnInit {
   /**************/
   /* On Selects */
   /**************/
-  onSelectType(_id: number): void {
+  // onSelectType(_id: number): void {
+  onSelectType(event): void {
+console.log('onSelectType event = ', event);
+this.selectedMediaTypeId = event;
+
     // get fileter list of sources    
-    this.mediasources = this._rss.getMediaSourcesFiltered(_id);
+    // this.mediasources = this._rss.getMediaSourcesFiltered(_id);
+    // this.mediasources = this._rss.getMediaSourcesFiltered(event.id);
+    this.mediasources = this._rss.getMediaSourcesFiltered(event);
 
     // if a source was selected, clear it out
     if (this.ac_source!=null){
@@ -99,12 +144,15 @@ export class ReplyCreateComponent implements OnInit {
 
   onSelectSource(_ac_source: MediaSource): void {
     this.ac_source = _ac_source;
+    this.selectedMediaSource = _ac_source;
 
     console.log("onSelectSource", _ac_source);
   }
 
-  onSelectCatergory(_id: number): void {
-    
+  // onSelectCatergory(_id: number): void {
+  onSelectCategory(event): void {
+    console.log('onSelectCatergory event = ', event);
+    this.selectedCategoryId = event;
     // console.log("_selectedCategory", _id);
   }
 
@@ -151,21 +199,39 @@ export class ReplyCreateComponent implements OnInit {
       // this.submitted = true; // set form submit to true
 
       model.mediaSourceId = this.ac_source.id;
+
       
-      // check if model is valid
-      // if valid, call API to save customer
-      console.log("save ", model, isValid);
+      console.log('submitForm model = ', model);
+      
+      // // check if model is valid
+      // // if valid, call API to save customer
+      // console.log("save ", model, isValid);
 
-      // this.postReply(model);
-      console.log("in postReply in component");
-      this._dataService.postReply(model).subscribe(data => this.spreturns = data, 
-                                                  //  err => {this.errorMessage = <any>err; console.log("ERROR in postReply: "+ err);},
-                                                  //  err => console.log("ERROR in postReply: "+ err),
-                                                  err => console.log("ERROR in postReply: ", err),
-                                                  () => console.log ("postReply done", this.spreturns));
-      console.log("exiting postReply in component");
+      // // this.postReply(model);
+      // console.log("in postReply in component");
+      // this._dataService.postReply(model).subscribe(data => this.spreturns = data, 
+      //                                             //  err => {this.errorMessage = <any>err; console.log("ERROR in postReply: "+ err);},
+      //                                             //  err => console.log("ERROR in postReply: "+ err),
+      //                                             err => console.log("ERROR in postReply: ", err),
+      //                                             () => console.log ("postReply done", this.spreturns));
+      // console.log("exiting postReply in component");
 
-      this.setVisibleComponent.emit("list");
+      // this.setVisibleComponent.emit("list");
+
+      /* save reply data */
+      this._rss.selectedMediaTypeId_Create = this.selectedMediaTypeId;
+      this._rss.selectedMediaSource_Create = this.selectedMediaSource;
+      this._rss.selectedCategoryId_Create = this.selectedCategoryId;
+      this._rss.reply = model;
+
+      console.log('this._rss.selectedMediaTypeId_Create = ', this._rss.selectedMediaTypeId_Create);
+      console.log('this._rss.selectedMediaSource = ', this._rss.selectedMediaSource_Create);
+      console.log('this._rss.selectedCategoryId_Create = ', this._rss.selectedCategoryId_Create);
+      console.log('this._rss.reply = ', this._rss.reply);
+      
+      
+      this.setVisibleComponent.emit("confirm");
+      
 
     }
 

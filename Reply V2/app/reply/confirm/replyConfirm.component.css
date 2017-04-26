@@ -1,0 +1,89 @@
+label {
+    font-weight: bold;
+}
+
+span {
+    margin-left: 1%;
+}
+
+/* needed for responsive textarea */
+textarea {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    width: 60%;
+}
+
+button {
+    background-color: #2399e5;
+    color: white;
+}
+
+.mygrid-container {
+    width: 100%;
+    overflow: hidden;
+}
+
+.mygrid-row {
+    display: block;
+    width: 100%;
+    float: left;
+}
+
+.mygrid-left {
+    display: inline;
+    width: 30%;
+    float: left;
+    text-align: right;
+}
+
+.mygrid-right {
+    display: inline;
+    width: 70%;
+    float: left;
+}
+
+.mygrid-row-button {
+    width: 100%;
+}
+
+.mygrid-left-button {
+    width: 50%;
+    float: left;
+    text-align: center;
+}
+
+.mygrid-right-button {
+    width: 50%;
+    float: right;
+    text-align: center;
+}
+
+@media only screen and (max-width: 800px) { /*iPhone 5 horizontal is 568px*/
+    .mygrid-container {
+        overflow: none;
+    }
+
+    .mygrid-left {
+        width: 100%;
+        text-align: left;
+    }
+
+    .mygrid-right {
+        width: 100%;
+    }
+
+    label {
+        vertical-align: -webkit-baseline-middle;
+    }
+    span {
+        margin-left: 0;
+    }
+
+    textarea {
+        width: 100%;
+    }
+}
+
+

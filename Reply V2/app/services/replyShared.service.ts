@@ -8,6 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import { MediaType } from '../models/media-type';
 import { MediaSource } from '../models/media-source';
 import { Category } from '../models/category';
+import { Reply } from '../models/reply';
 
 // App services
 import { DataService } from '../services/data.service';
@@ -19,6 +20,16 @@ export class ReplySharedService {
   mediatypes: MediaType[];
   mediasources: MediaSource[];
   categories: Category[];
+
+  /* Create objects passed between create and confirm */
+  selectedMediaType_Create: MediaType = null;
+  selectedMediaSource_Create: MediaSource = null;
+  selectedCategory_Create: Category = null;
+  reply: Reply;
+
+
+  selectedMediaTypeId_Create: number = null;
+  selectedCategoryId_Create: number = null;
 
   /* Miscellnaeous */
   errorMessage: string;
@@ -44,7 +55,7 @@ export class ReplySharedService {
   }
 
   getMediaTypes() {
-    console.log('in shared getMediaTypes:');
+    console.log('in shared getMediaTypes:', this.mediatypes);
     return this.mediatypes;
   }
 
@@ -61,6 +72,11 @@ export class ReplySharedService {
   getCategories() {
     console.log('in shared getCategories:');
     return this.categories;
+  }
+
+  getReply() {
+    console.log('in shared getReply:');
+    return this.reply;
   }
 
 }

@@ -22,6 +22,10 @@
             <my-create (setVisibleComponent)="setVisibleComponent($event)"></my-create> 
         </div>
         
+        <div id="mainContent" *ngIf="visibleComponent === 'confirm'">
+            <my-confirm (setVisibleComponent)="setVisibleComponent($event)"></my-confirm> 
+        </div>
+
         <!-- Footer -->
         <div class="gridbox gridfooter">
             <div class="footer">

@@ -7,11 +7,9 @@
             <li>
                 <label>Media Type: </label>
                 <select class="dropdown" name="mediatype" formControlName = "mediaTypeId"
-                        (ngModel)="selectedMediaType" (ngModelChange)="onSelectType($event)">
-                    <option class="place_holder" value = "" selected="selected" >Please select a media type</option>
-                    <option *ngFor="let mediatype of mediatypes"
-                        [class.selected]="mediatype === selectedMediaType"
-                        value = {{mediatype.id}}>
+                        [ngModel]="selectedMediaTypeId" (ngModelChange)="onSelectType($event)">
+                    <option *ngFor="let mediatype of mediatypes"           
+                        [ngValue] = "mediatype.id">
                         {{mediatype.mediaTypeName}}
                     </option>
                 </select>
@@ -27,10 +25,12 @@
             <li>
                 <label>Media Source: </label>
                 <!--<div class="content-section implementation">-->
-                    <p-autoComplete class="autocomplete" id="autocomplete" [(ngModel)]="ac_source" [suggestions]="ac_filteredSources" (completeMethod)="filterSources($event)" field="mediaSourceName" [size]="30"
+                    <p-autoComplete class="autocomplete" id="autocomplete" [ngModel]="ac_source" [suggestions]="ac_filteredSources" (completeMethod)="filterSources($event)" 
+                        field="mediaSourceName" [size]="30"
+                        dataKey = "id"
                         placeholder="Enter a Media Source" [minLength]="1" [dropdown]="true" (onDropdownClick)="handleSourceDropdownClick($event)" [disabled]="acDisabled"
                         name="mediaSourceId" formControlName="mediaSourceId"
-                        (onSelect)="onSelectSource(ac_source)">
+                        (onSelect)="onSelectSource($event, ac_source)">
                     </p-autoComplete>        
                 <!--</div>-->
                 <div>
@@ -44,11 +44,10 @@
             <div class="menuitem">
             <li>
                 <label>Category: </label>
-                <select class="dropdown" name="cateogry" formControlName="categoryId"
-                        (ngModel)="selectedCategory" (ngModelChange)="onSelectCatergory($event)">
-                    <option class="place_holder" value = "" selected="selected" >Please select a category</option>
-                    <option *ngFor="let category of categories"
-                        value = {{category.id}}>
+                <select class="dropdown" name="cateogry" formControlName = "categoryId"
+                        [ngModel]="selectedCategoryId" (ngModelChange)="onSelectCategory($event)">
+                    <option *ngFor="let category of categories"           
+                        [ngValue] = "category.id">
                         {{category.categoryName}}
                     </option>
                 </select>

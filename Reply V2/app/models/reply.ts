@@ -1,11 +1,24 @@
 export class Reply {
-
-  constructor(
-    public mediaTypeId: number,
-    public mediaSourceId: number,
-    public categoryId: number,
-    public title: string,
-    // public articleDate: date,
-    public replyText: string //reply?
-	) {  }
+  id: number;
+  mediaTypeName: string;
+  mediaTypeId: number;
+  mediaSourceId: number;
+  categoryId: number;
+  title: string;
+  reporter: string;
+  // articleDate: date;
+  replyText: string; //reply?
 }
+
+export const ReplyInitialize: Reply = 
+    {
+      "id": 0,
+      "mediaTypeName": "",
+      "mediaTypeId": 0,
+      "mediaSourceId": 0,
+      "categoryId": 0,
+      "title": "",
+      "reporter": "",
+      // "articleDate": date;
+      "replyText": "" //reply?
+    }
