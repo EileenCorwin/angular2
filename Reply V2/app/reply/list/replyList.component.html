@@ -1,3 +1,15 @@
+<script>
+$('.ui.dropdown').dropdown();
+$('#select').dropdown();
+$('#hybrid select').dropdown({on: 'hover'});
+$('#search-select').dropdown();
+$('#multi-select').dropdown();
+$('#cateogry-select').dropdown();
+
+// $('#skills').dropdown();
+// $('#skills-select').dropdown();
+</script>
+
 <form [formGroup]="replyForm" novalidate (ngSubmit)="replyForm.valid && submitForm(replyForm.value, replyForm.valid)">
 
     <!-- Sidebar Selections -->
@@ -14,15 +26,25 @@
             <div class="menuitem">
             <li>
                 <label>Media Type: </label>
-                <select class="dropdown" name="mediatype" formControlName = "mediaTypeId"
-                        (ngModel)="selectedMediaType" (ngModelChange)="onSelectType($event)">
-                    <option class="place_holder" value = "" selected="selected" >Please select a media type</option>
+
+                <!--<select id="mediatype" name="mediatype" class="ui dropdown" formControlName = "mediaTypeId"
+                        [ngModel]="selectedMediaTypeId" (ngModelChange)="onSelectType($event)">      
+                    <option value="">Testing PlaceHolder</option>
                     <option *ngFor="let mediatype of mediatypes"
-                        [class.selected]="mediatype === selectedMediaType"
-                        value = {{mediatype.id}}>
+                         [class.selected]="mediatype.id === selectedMediaTypeId"
+                         value = {{mediatype.id}}>
                         {{mediatype.mediaTypeName}}
                     </option>
-                </select>
+                </select>-->
+
+                <select id="mediatype" name="mediatype" multiple="" class="ui dropdown" formControlName = "mediaTypeId"
+                        (ngModelChange)="onSelectType($event)">      
+                    <option *ngFor="let mediatype of mediatypes"
+                         value = {{mediatype.id}}>
+                        {{mediatype.mediaTypeName}}
+                    </option>
+                </select>  
+
                 <div>
                 <small class="errormsg" [hidden]="replyForm.controls.mediaTypeId.valid || (neversubmitted)">
                     Media type required.
@@ -34,16 +56,27 @@
             <div class="menuitem">
             <li>
                 <label>Media Source: </label>
+
+                <select id="mediasource" name="mediasource" class="ui fluid search dropdown" multiple=""  formControlName = "mediaSourceId"
+                       (ngModelChange)="onSelectSource($event)">      
+                    <!--option value="">Testing Source PlaceHolder</option>-->
+                    <option *ngFor="let mediasource of mediasources"
+                         value = {{mediasource.id}}>
+                        {{mediasource.mediaSourceName}}
+                    </option>
+                </select> 
+
+
                 <!--<div class="content-section implementation">-->
-                    <p-autoComplete class="autocomplete" id="autocomplete" [(ngModel)]="ac_source" [suggestions]="ac_filteredSources" (completeMethod)="filterSources($event)" field="mediaSourceName" [size]="30"
+                    <!--<p-autoComplete class="autocomplete" id="autocomplete" [(ngModel)]="ac_source" [suggestions]="ac_filteredSources" (completeMethod)="filterSources($event)" field="mediaSourceName" [size]="30"
                         placeholder="Enter a Media Source" [minLength]="1" [dropdown]="true" (onDropdownClick)="handleSourceDropdownClick($event)" [disabled]="acDisabled"
                         name="mediaSourceId" formControlName="mediaSourceId"
                         (onSelect)="onSelectSource(ac_source)">
-                    </p-autoComplete> 
+                    </p-autoComplete> -->
 
                 <!--</div>-->
                 <div>
-                <small class="errormsg" [hidden]="ac_source || (neversubmitted)">
+                <small class="errormsg" [hidden]="replyForm.controls.mediaSourceId.valid || (neversubmitted)">
                     Media source required.
                 </small>
                 </div>
@@ -53,14 +86,35 @@
             <div class="menuitem">
             <li>
                 <label>Category: </label>
-                <select class="dropdown" name="cateogry" formControlName="categoryId"
-                        (ngModel)="selectedCategory" (ngModelChange)="onSelectCatergory($event)">
-                    <option class="place_holder" value = "" selected="selected" >Please select a category</option>
+
+                <!--<select id="cateogry" name="cateogry" class="ui dropdown" formControlName = "categoryId"
+                        [ngModel]="selectedCategoryId" (ngModelChange)="onSelectCatergory($event)">      
                     <option *ngFor="let category of categories"
-                        value = {{category.id}}>
+                         [class.selected]="category.id === selectedCategoryId"
+                         value = {{category.id}}>
                         {{category.categoryName}}
                     </option>
                 </select>
+
+                <select id="cateogry" name="cateogry" multiple="" class="ui fluid dropdown" 
+                        (ngModelChange)="onSelectCatergory($event)">      
+                    <option value="">Gender</option>
+                    <option *ngFor="let category of categories"
+                         value = {{category.id}}>
+                        {{category.categoryName}}
+                    </option>
+                </select>-->
+                
+                <!--<select id="cateogry" name="cateogry" multiple="" class="ui fluid dropdown" formControlName = "categoryId"-->
+                <select id="cateogry-select" name="cateogry" multiple="" class="ui dropdown" formControlName = "categoryId"
+                        (ngModelChange)="onSelectCatergory($event)"> 
+                    <!--<option value="">Select one or more categories</option>-->
+                    <option *ngFor="let category of categories"
+                         value = {{category.id}}>
+                        {{category.categoryName}}
+                    </option>
+                </select>  
+
                 <div>
                 <small class="errormsg" [hidden]="replyForm.controls.categoryId.valid || (neversubmitted)">
                     Category required.
@@ -71,7 +125,7 @@
 
             <div class="menuitem">
             <li>
-                <label>Reporter/Author: </label>
+                <label>Reporter: </label>
                 <input type="text" formControlName="reporter">
                 <div>
                 <small class="errormsg" [hidden]="replyForm.controls.reporter.valid || (neversubmitted)">
@@ -83,7 +137,7 @@
             
             <div class="menuitem">
             <li>
-                <label>Date: </label>
+                <label>Article Date: </label>
                 <input type="text" name="reportdate">
             </li>
             </div>
@@ -152,6 +206,11 @@
                         <p-header>
                             {{reply.title}}
                         </p-header>
+                        <div style="float:right">
+                        <!--<button type="submit" (click)="onSelectReply(reply.mediaTypeId, reply.mediaSourceId, reply.categoryId, reply.title)">Add your reply to this article</button>-->
+                        <button type="submit" (click)="onSelectReply(reply)">Add your reply to this article</button>
+                        </div>
+                        <BR>
                         {{reply.replyText}}    
                     </p-accordionTab>
 

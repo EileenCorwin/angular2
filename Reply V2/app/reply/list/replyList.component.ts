@@ -1,5 +1,5 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'; /* for model form */
+import { Component, OnInit, EventEmitter, Output, AfterViewInit } from '@angular/core';
+import { FormGroup, FormControl, FormBuilder, Validators,  } from '@angular/forms'; /* for model form */
 
 
 import { ReplySharedService } from '../../services/replyShared.service';
@@ -12,6 +12,10 @@ import { Category } from '../../models/category';
 import { Reply } from '../../models/reply';
 import { ReplyDisplay } from '../../models/reply-display';
 
+import { MediaTypePlaceHolder } from '../../models/media-type';
+import { CategoryPlaceHolder } from '../../models/category';
+
+declare var $: any;
 
 @Component({
   moduleId: module.id,
@@ -21,7 +25,7 @@ import { ReplyDisplay } from '../../models/reply-display';
   providers: [DataService]
 })
 
-export class ReplyListComponent implements OnInit {
+export class ReplyListComponent implements OnInit, AfterViewInit {
   /* Shared Visible Component objects */
   @Output() setVisibleComponent = new EventEmitter<string>();
   visibleComponent: string;
@@ -49,30 +53,77 @@ export class ReplyListComponent implements OnInit {
 
   /* Miscellaneous */
   selectedMediaTypeId: number;
+  selectedMediaSourceId: number;
   selectedMediaSource: MediaSource = null;
   selectedCategoryId: number;
 
   neversubmitted: boolean;
   errorMessage: string;
 
+  //??????
+  selectedMediaType: MediaType;
+
   constructor(private _rss: ReplySharedService, private _ds: DataService, private _fb: FormBuilder) {}
+
+  ngAfterViewInit() {
+    $('.ui.dropdown').dropdown();
+    $('#mediatype').dropdown();
+    $('#mediasource').dropdown();
+    $('#cateogry').dropdown();
+    // $('#skills').dropdown();
+    // $('#cateogry-select').dropdown();
+    // $('#skills-select').dropdown();
+
+    console.log('ngAfterViewInit');
+
+    // var selectedvalues = ['1', '3'];
+    // console.log('selectedvalues = ', selectedvalues);
+    // $('#mediatype').dropdown('set selected', selectedvalues);
+    // $('#mediatype').dropdown('set selected', ['1', '3']);
+    // $('#mediatype').dropdown('set selected', '1');
+  }
 
   /***********/
   /* On Init */
   /***********/
   ngOnInit(): void {
     this.mediatypes = this._rss.getMediaTypes();
-    console.log('in constructor replyCreate aft  in ngOnInit>= ', this.mediatypes);
+    console.log('in replyList in ngOnInit>= ', this.mediatypes);
+
+    // this.mediatypes.unshift(MediaTypePlaceHolder);
+    // this.selectedMediaTypeId = this.mediatypes[0].id;
+    console.log('this.selectedMediaType', this.selectedMediaType);
     
     this.categories = this._rss.getCategories();
-    console.log('in constructor replyCreate aft  in ngOnInit>= ', this.categories);
+    console.log('in replyList   in ngOnInit>= ', this.categories);
+    // this.categories.unshift(CategoryPlaceHolder);
+    // this.selectedCategoryId = this.categories[0].id;
+    // console.log('this.selectedMediaType', this.selectedMediaType);
+
+
+    /*******************/
+    /* formGroup Stuff */
+    /*******************/
+    function mediaTypeValidator(control: FormControl): { [s: string]: boolean } {  
+      if (control.value <= 0 ) {  
+        return {invalidMediaType: true};  
+      }
+    }
+    function categoryValidator(control: FormControl): { [s: string]: boolean } {  
+      if (control.value <= 0 ) {  
+        return {invalidCategory: true};  
+      }
+    }
 
     this.replyForm = this._fb.group({
-      mediaTypeId: ['', <any>Validators.required],
+      // mediaTypeId: ['', <any>Validators.required],
+      mediaTypeId: ['', Validators.compose([ Validators.required, mediaTypeValidator ])],
       mediaSourceId: ['', <any>Validators.required],
-      categoryId: ['', <any>Validators.required],
+      // categoryId: ['', <any>Validators.required],
+      categoryId: ['', Validators.compose([ Validators.required, categoryValidator ])],
       reporter: ['', [<any>Validators.required, <any>Validators.minLength(5)]]          
-    }); 
+    });
+    /* end - formGroup Stuff */ 
 
     this.neversubmitted = true;
     this.submitted = false;
@@ -81,9 +132,23 @@ export class ReplyListComponent implements OnInit {
   /**************/
   /* On Selects */
   /**************/
-  onSelectType(_id: number): void {
+  // onSelectType(_id: number): void {
+  onSelectType(event): void {
+    console.log('onSelectType event = ', event);
     // get fileter list of sources    
-    this.mediasources = this._rss.getMediaSourcesFiltered(_id);
+    // this.mediasources = this._rss.getMediaSourcesFiltered(_id);
+
+    $('#mediasource').dropdown('clear');
+
+    // this.mediasources = this._rss.getMediaSourcesFiltered(event);
+
+    console.log('is event and array ', Array.isArray(event));
+
+    if (event) {
+      this.mediasources = this._rss.getMediaSourcesFiltered(event);
+      console.log('onSelectType aft getMediaSourcesFiltered2 this.mediasources = ', this.mediasources);
+    }
+    
 
     // if a source was selected, clear it out
     if (this.ac_source!=null){
@@ -95,52 +160,69 @@ export class ReplyListComponent implements OnInit {
     this.ac_sources = this.mediasources
   } //onSelectType
 
-  onSelectSource(_ac_source: MediaSource): void {
-    this.ac_source = _ac_source;
+  // onSelectSource(_ac_source: MediaSource): void {
+  //   this.ac_source = _ac_source;
 
-    console.log("onSelectSource", _ac_source);
+  //   console.log("onSelectSource", _ac_source);
+  // }
+
+  onSelectSource(event): void {
+    // console.log('event =', event);
+    // console.log("_selectedCategory", _id);
+  }
+  // onSelectCatergory(_id: number): void {
+  onSelectCatergory(event): void {
+    // console.log('event =', event);
+    // console.log("_selectedCategory", _id);
   }
 
-  onSelectCatergory(_id: number): void {
-    
+  // onSelectReply(mediaTypeId: number, mediaSourceId: number, categoryId: number, title: string): void {
+  //   console.log('onSelectReply event =', mediaTypeId, mediaSourceId, categoryId, title);
+  onSelectReply(_reply: Reply): void {
+    console.log('onSelectReply event =', _reply);
     // console.log("_selectedCategory", _id);
+    this._rss.selectedReply = _reply;
+    this._rss.priorComponent = "list";
+
+    this.submitted = true;
+    this.setVisibleComponent.emit("create");    
   }
 
   /************************/
   /* PrimeNG AutoComplete */
   /************************/
-  filterSources(event) {
-    let ac_found: boolean = false;
-    this.ac_sources = this.mediasources
-    this.ac_filteredSources = [];
+  // filterSources(event) {
+  //   let ac_found: boolean = false;
+  //   this.ac_sources = this.mediasources
+  //   this.ac_filteredSources = [];
     
-    for(let i = 0; i < this.ac_sources.length; i++) {
-        let ac_source = this.ac_sources[i];
-        if(ac_source.mediaSourceName.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
-            this.ac_filteredSources.push(ac_source);
+  //   for(let i = 0; i < this.ac_sources.length; i++) {
+  //       let ac_source = this.ac_sources[i];
+  //       if(ac_source.mediaSourceName.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
+  //           this.ac_filteredSources.push(ac_source);
 
-            ac_found = true;
-            console.log("hit");
-        }
-    }
+  //           ac_found = true;
+  //           console.log("hit");
+  //       }
+  //   }
 
-    if (!ac_found) {
-      this.ac_sources = this.mediasources;
-      this.ac_source = null;
+  //   if (!ac_found) {
+  //     this.ac_sources = this.mediasources;
+  //     this.ac_source = null;
 
-      console.log("no hit");
-    }
-  }
+  //     console.log("no hit");
+  //   }
+  // }
    
-  handleSourceDropdownClick() {
-      this.ac_filteredSources = [];
+  // handleSourceDropdownClick() {
+  //     this.ac_filteredSources = [];
       
-      //mimic remote call
-      setTimeout(() => {
-          this.ac_filteredSources = this.mediasources;
-      // }, 100)
-      }, 1)
-    }
+  //     //mimic remote call
+  //     setTimeout(() => {
+  //         this.ac_filteredSources = this.mediasources;
+  //     // }, 100)
+  //     }, 1)
+  //   }
 
   /***************/ 
   /* Submit Form */ 
@@ -148,7 +230,7 @@ export class ReplyListComponent implements OnInit {
   submitForm(model: any, isValid: boolean) {
       // console.log('model=', model);
       
-      model.mediaSourceId = this.ac_source.id;
+      // model.mediaSourceId = this.ac_source.id;
       
       // check if model is valid
       // if valid, call API to save customer

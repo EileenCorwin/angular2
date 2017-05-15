@@ -17,6 +17,7 @@ export class ReplyMainComponent {
 
   //Controls which component is visible
   setVisibleComponent(_visibleComponent: string){
+    console.log('replyMainC setVisibleComponent ', _visibleComponent);
     this.visibleComponent = _visibleComponent;
   }
 

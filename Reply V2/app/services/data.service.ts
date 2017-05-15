@@ -100,7 +100,8 @@ export class DataService {
     let params: URLSearchParams = new URLSearchParams();
     for(let key in query){
       // console.log('key.toString=',key.toString(), ' and value=', query[key]);
-      if (key.toString() != 'reporter') {params.set(key.toString(), query[key]);console.log('key.toString=',key.toString(), ' and value=', query[key]);};
+      if (key.toString() != 'reporter') {params.set(key.toString(), query[key]);
+        console.log('key.toString=',key.toString(), ' and value=', query[key]);};
       // params.set(key.toString(), query[key]);
     }
     options.search = params;    

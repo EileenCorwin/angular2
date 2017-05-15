@@ -27,12 +27,17 @@ export class ReplySharedService {
   selectedCategory_Create: Category = null;
   reply: Reply;
 
+  selectedReply: Reply = null;
+  priorComponent: string = "";
+
 
   selectedMediaTypeId_Create: number = null;
   selectedCategoryId_Create: number = null;
 
   /* Miscellnaeous */
   errorMessage: string;
+
+  filteredmediasources: MediaSource[] = null;
 
   constructor(private _ds: DataService) {}
 
@@ -64,11 +69,31 @@ export class ReplySharedService {
     return this.mediasources;
   }
 
-  getMediaSourcesFiltered(_mediaTypeId: number) {
-    console.log('in shared getMediaSourcesFiltered:');
-    return this.mediasources.filter(mediasource => mediasource.mediaTypeId == _mediaTypeId)
-  }
+  // getMediaSourcesFiltered(_mediaTypeId: number) {
+  //   console.log('in shared getMediaSourcesFiltered:');
+  //   return this.mediasources.filter(mediasource => mediasource.mediaTypeId == _mediaTypeId)
+  // }
 
+  getMediaSourcesFiltered(_mediaTypeIds: number[]) {
+    console.log('in shared getMediaSourcesFiltered2:_mediaTypeIds = ', _mediaTypeIds);
+
+   this.filteredmediasources = [];
+   console.log('_mediaTypeIds.length = ', _mediaTypeIds.length);
+
+    for (var i=0; i < _mediaTypeIds.length; i++) {
+      console.log('_mediaTypeIds[i] = ', _mediaTypeIds[i]); 
+      var filtered = this.mediasources.filter(mediasource => mediasource.mediaTypeId == _mediaTypeIds[i]);
+      console.log('filtered = ', filtered);
+      
+      this.filteredmediasources = this.filteredmediasources.concat(filtered);
+      console.log('filteredmediasources i = ', i, ' = ', this.filteredmediasources);
+    } 
+
+    console.log('filteredmediasources = ', this.filteredmediasources);
+    return this.filteredmediasources;
+
+  }
+  
   getCategories() {
     console.log('in shared getCategories:');
     return this.categories;

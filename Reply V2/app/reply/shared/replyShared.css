@@ -138,3 +138,41 @@ ul {
     }
 }
 /* end W3School The Pulpit Rock template */
+
+/*************************/
+/* Semantic UI dropdowns */
+/*************************/
+/* changing the height of the dd box */
+.ui.selection.dropdown {
+    min-height: 22px; /* from 2.71428571em (38px) */
+    padding-top: 2px; /* from 0.785714em (11px) */
+    padding-bottom: 2px; /* from 0.785714em (11px) */
+    padding-left: 4px; /* from 1em (14px) */
+}
+/* changing the height location of the dd icon since changing the height of the dd itself */
+.ui.selection.dropdown > .dropdown.icon {
+    top: 4px; /* from 0.78571429em */
+}
+/* changing the line heights of the menu items */
+.ui.dropdown .menu > .item {
+    padding-top: 2px; /* from 0.785714em (11px) */
+    padding-bottom: 2px; /* from 0.785714em (11px) */
+    padding-left: 12px; /* from 1.14286rem (16px) */
+}
+/* changing the height of the multi select search dd box */
+.ui.multiple.search.dropdown > input.search {
+    margin: 0; /* from 0.45238095em 0em 0.45238095em 0.64285714em */
+}
+/* slightly changing the height of the multi select dd with selections */
+.ui.multiple.dropdown > .label {
+    margin: 0; /* from 0.14285714rem 0.28571429rem 0.14285714rem 0em */
+    margin-right: 4px;
+    padding: 2px 4px; /* from 0.35714286em 0.78571429em */
+}
+/* changing the width of the multi select search dd box */
+.ui.fluid.dropdown {
+    display: inline-block; /* from display: block */
+    width: 0; /* from width: 100% */
+    min-width: 14em; /* from min-width: 0em */
+}
+/*************************/

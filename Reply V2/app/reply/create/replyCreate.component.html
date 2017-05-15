@@ -6,13 +6,22 @@
             <div class="menuitem">
             <li>
                 <label>Media Type: </label>
-                <select class="dropdown" name="mediatype" formControlName = "mediaTypeId"
+                <!--<select class="dropdown" name="mediatype" formControlName = "mediaTypeId"
                         [ngModel]="selectedMediaTypeId" (ngModelChange)="onSelectType($event)">
                     <option *ngFor="let mediatype of mediatypes"           
                         [ngValue] = "mediatype.id">
                         {{mediatype.mediaTypeName}}
                     </option>
-                </select>
+                </select>-->
+
+                <select id="mediatype" name="mediatype" class="ui dropdown" formControlName = "mediaTypeId"
+                        (ngModelChange)="onSelectType($event)">      
+                    <option value="">Please select a media type</option>"
+                    <option *ngFor="let mediatype of mediatypes"
+                            value = {{mediatype.id}}>
+                        {{mediatype.mediaTypeName}}
+                    </option>
+                </select>  
                 <div>
                 <small class="errormsg" [hidden]="replyForm.controls.mediaTypeId.valid || (neversubmitted)">
                     Media type required.
@@ -25,14 +34,24 @@
             <li>
                 <label>Media Source: </label>
                 <!--<div class="content-section implementation">-->
-                    <p-autoComplete class="autocomplete" id="autocomplete" [ngModel]="ac_source" [suggestions]="ac_filteredSources" (completeMethod)="filterSources($event)" 
+                    <!--<p-autoComplete class="autocomplete" id="autocomplete" [ngModel]="ac_source" [suggestions]="ac_filteredSources" (completeMethod)="filterSources($event)" 
                         field="mediaSourceName" [size]="30"
                         dataKey = "id"
                         placeholder="Enter a Media Source" [minLength]="1" [dropdown]="true" (onDropdownClick)="handleSourceDropdownClick($event)" [disabled]="acDisabled"
                         name="mediaSourceId" formControlName="mediaSourceId"
                         (onSelect)="onSelectSource($event, ac_source)">
-                    </p-autoComplete>        
+                    </p-autoComplete>        -->
                 <!--</div>-->
+
+                <select id="mediasource" name="mediasource" class="ui search dropdown" formControlName = "mediaSourceId"
+                       (ngModelChange)="onSelectSource($event)">      
+                    <option value="">Please select a media source</option>
+                    <option *ngFor="let mediasource of mediasources"
+                         value = {{mediasource.id}}>
+                        {{mediasource.mediaSourceName}}
+                    </option>
+                </select> 
+
                 <div>
                 <small class="errormsg" [hidden]="ac_source || (neversubmitted)">
                     Media source required.
@@ -44,13 +63,23 @@
             <div class="menuitem">
             <li>
                 <label>Category: </label>
-                <select class="dropdown" name="cateogry" formControlName = "categoryId"
+                <!--<select class="dropdown" name="cateogry" formControlName = "categoryId"
                         [ngModel]="selectedCategoryId" (ngModelChange)="onSelectCategory($event)">
                     <option *ngFor="let category of categories"           
                         [ngValue] = "category.id">
                         {{category.categoryName}}
                     </option>
-                </select>
+                </select>-->
+
+                <select id="category" name="category" class="ui dropdown" formControlName = "categoryId"
+                        (ngModelChange)="onSelectCategory($event)">      
+                    <option value="">Please select a category</option>"
+                    <option *ngFor="let category of categories"
+                            value = {{category.id}}>
+                        {{category.categoryName}}
+                    </option>
+                </select>  
+
                 <div>
                 <small class="errormsg" [hidden]="replyForm.controls.categoryId.valid || (neversubmitted)">
                     Category required.
@@ -61,8 +90,8 @@
 
             <div class="menuitem">
             <li>
-                <label>Reporter/Author: </label>
-                <input type="text" formControlName="reporter">
+                <label>Reporter: </label>
+                <input type="text" formControlName="reporter" placeholder="Please enter the name of the reporter of the article">
                 <div>
                 <small class="errormsg" [hidden]="replyForm.controls.reporter.valid || (neversubmitted)">
                     Reporter required (minimum 5 characters).
@@ -73,7 +102,7 @@
             
             <div class="menuitem">
             <li>
-                <label>Date: </label>
+                <label>Article Date: </label>
                 <input type="text" name="reportdate">
             </li>
             </div>
@@ -84,7 +113,7 @@
     <div class="gridbox gridmain">
         <div class="main">
             <div>
-            <label>Title: </label>      
+            <label>Article Title: </label>      
             <input type="text" formControlName="title">
             <small class="errormsg" [hidden]="replyForm.controls.title.valid || (neversubmitted)">
                 Title required (minimum 5 characters).
@@ -92,7 +121,7 @@
             </div>
 
             <div>
-            <label>Reply: </label>
+            <label>Your Reply: </label>
             <textarea rows="20" cols="100" style="overflow-y: scroll; resize: none;" formControlName="replyText"></textarea>
             <small class="errormsg" [hidden]="replyForm.controls.replyText.valid || (neversubmitted)">
                 Reply text required (minimum 5 characters).

@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, AfterViewInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'; /* for model form */
 
 import { ReplySharedService } from '../../services/replyShared.service';
@@ -16,11 +16,14 @@ import { MediaSourceInit } from '../../models/media-source';
 import { CategoryPlaceHolder } from '../../models/category';
 import { ReplyInitialize } from '../../models/reply';
 
+declare var $: any;
+
 @Component({
   moduleId: module.id,
   selector: 'my-create',
   templateUrl: './replyCreate.component.html',
-  styleUrls: [ './replyCreate.component.css',  '../shared/sidenav.css',  '../shared/replyShared.css'],
+  // styleUrls: [ './replyCreate.component.css',  '../shared/sidenav.css',  '../shared/replyShared.css'],
+  styleUrls: [ './replyCreate.component.css',  '../shared/replyShared.css'],
   providers: [DataService]
 })
 
@@ -62,25 +65,28 @@ export class ReplyCreateComponent implements OnInit {
   neversubmitted: boolean;
   errorMessage: string;
 
-  constructor(private _rss: ReplySharedService, private _dataService: DataService, private _fb: FormBuilder) {}
+  eventArray: number[]=[];
 
+  constructor(private _rss: ReplySharedService, private _dataService: DataService, private _fb: FormBuilder) {}
+  
   /***********/
   /* On Init */
   /***********/
   ngOnInit(): void {
+    console.log('in replyCreate');
     /* initialize mediatypes */
     this.mediatypes = this._rss.mediatypes;
     // this.selectedMediaType = this._rss.selectedMediaType_Create;
     this.selectedMediaTypeId = this._rss.selectedMediaTypeId_Create;
     // add placeholder if no selection made and placeholder not there (auto-updates shared recordset)
-    if (!this.selectedMediaTypeId && this.mediatypes[0].id != -1) {
-      this.mediatypes.unshift(MediaTypePlaceHolder);
-      this.selectedMediaTypeId = this.mediatypes[0].id;
-    }
-    // remove placeholder if selection made and placeholder there (auto-updates shared recordset)
-    else if (this.selectedMediaTypeId && this.mediatypes[0].id === -1) {
-      this.mediatypes.shift();
-    }
+    // if (!this.selectedMediaTypeId && this.mediatypes[0].id != -1) {
+    //   this.mediatypes.unshift(MediaTypePlaceHolder);
+    //   this.selectedMediaTypeId = this.mediatypes[0].id;
+    // }
+    // // remove placeholder if selection made and placeholder there (auto-updates shared recordset)
+    // else if (this.selectedMediaTypeId && this.mediatypes[0].id === -1) {
+    //   this.mediatypes.shift();
+    // }
 
     /* initialize mediasources */
     //nothing happens yet with the control
@@ -93,18 +99,43 @@ export class ReplyCreateComponent implements OnInit {
     // this.selectedCategory = this._rss.selectedCategory_Create;
     this.selectedCategoryId = this._rss.selectedCategoryId_Create;
     // add placeholder if no selection made and placeholder not there (auto-updates shared recordset)
-    if (!this.selectedCategoryId && this.categories[0].id != -1) {
-      this.categories.unshift(CategoryPlaceHolder);
-      this.selectedCategoryId = this.categories[0].id;
-    }
-    // remove placeholder if selection made and placeholder there (auto-updates shared recordset)
-    else if (this.selectedCategoryId && this.categories[0].id === -1) {
-      this.categories.shift();
-    }
+    // if (!this.selectedCategoryId && this.categories[0].id != -1) {
+    //   this.categories.unshift(CategoryPlaceHolder);
+    //   this.selectedCategoryId = this.categories[0].id;
+    // }
+    // // remove placeholder if selection made and placeholder there (auto-updates shared recordset)
+    // else if (this.selectedCategoryId && this.categories[0].id === -1) {
+    //   this.categories.shift();
+    // }
 
     /* initialize reply form */
-    this.reply = this._rss.reply;
+    console.log('intializing prior=', this._rss.priorComponent, ' and reply=', this._rss.selectedReply);
+
+    /* coming from list component, selected reply */
+    if (this._rss.priorComponent === 'list') {
+// console.log('if from list');
+      // get selected reply values
+      this.reply = this._rss.selectedReply;
+      
+      // get media sources based on media type of the reply
+      this.eventArray = [];
+      this.eventArray.push(this.reply.mediaTypeId);
+      this.mediasources = this._rss.getMediaSourcesFiltered(this.eventArray);
+      
+      // clear reply text
+      this.reply.replyText = "";
+    }
+    /* coming from menu selection "Reply" */
+    else {
+// console.log('if NOT from list', this._rss.reply);
+      this.reply = this._rss.reply;
+    }
+
+    // this.reply = this._rss.reply;
     if (!this.reply) {this.reply = ReplyInitialize}; // initialize if empty
+
+console.log('in create init this.reply=', this.reply);
+
     this.replyForm = this._fb.group({
       // mediaTypeId: ['', <any>Validators.required],
       mediaTypeId: [this.reply.mediaTypeId, <any>Validators.required],
@@ -119,18 +150,36 @@ export class ReplyCreateComponent implements OnInit {
     this.neversubmitted = true;
   } //ngOnInit
 
+  /*******************/
+  /* After View Init */
+  /*******************/
+  ngAfterViewInit() {
+    $('.ui.dropdown').dropdown();
+    $('#mediatype').dropdown();
+    $('#mediasource').dropdown();
+    $('#category').dropdown();
+
+    // $('#mediatype').dropdown('set selected', this.reply.mediaTypeId);
+    // $('#mediasource').dropdown('set selected', '5');
+    // $('#category').dropdown('set selected', '7');
+  }
+
   /**************/
   /* On Selects */
   /**************/
   // onSelectType(_id: number): void {
   onSelectType(event): void {
-console.log('onSelectType event = ', event);
-this.selectedMediaTypeId = event;
+    this.selectedMediaTypeId = event;
 
-    // get fileter list of sources    
+    this.eventArray = [];
+    this.eventArray.push(event);
+    
+    // get filter list of sources
+    this.mediasources = this._rss.getMediaSourcesFiltered(this.eventArray);    
     // this.mediasources = this._rss.getMediaSourcesFiltered(_id);
     // this.mediasources = this._rss.getMediaSourcesFiltered(event.id);
-    this.mediasources = this._rss.getMediaSourcesFiltered(event);
+    // this.mediasources = this._rss.getMediaSourcesFiltered(event);
+   
 
     // if a source was selected, clear it out
     if (this.ac_source!=null){

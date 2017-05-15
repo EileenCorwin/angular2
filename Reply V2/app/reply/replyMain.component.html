@@ -15,7 +15,7 @@
         </div>
 
         <div id="mainContent" *ngIf="visibleComponent === 'list'">
-            <my-list></my-list> 
+            <my-list (setVisibleComponent)="setVisibleComponent($event)"></my-list> 
         </div>
 
         <div id="mainContent" *ngIf="visibleComponent === 'create'">

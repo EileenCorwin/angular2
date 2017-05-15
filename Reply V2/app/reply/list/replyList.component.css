@@ -61,6 +61,16 @@
 .ui-accordion .ui-accordion-content {
     background-color: #fffae6;
 }
+
+/*.ui-accordion .ui-accordion-header:visited a {*/
+    /*.ui-accordion .ui-accordion-header:not(.ui-state-active):not(.ui-state-disabled):visited a {*/
+    /*.ui-accordion .ui-accordion-header a ::after {*/
+        /*.ui-accordion .ui-accordion-header a:visited {
+
+    color: red!important;
+    font-style: italic;
+}*/
+
 /* end - PrimeNG Accordian Overrides */
 
 /* PrimeNG AutoComplete Overrides */
