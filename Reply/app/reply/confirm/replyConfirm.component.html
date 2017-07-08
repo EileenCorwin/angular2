@@ -1,0 +1,140 @@
+<div style="background-color: #fffae6;">
+
+    <div class="mygrid-container">    
+        <div class="mygrid-row">
+            <div class="mygrid-left">
+                <label>Media Type: </label>
+            </div>
+            <div class="mygrid-right">
+                <span class="spanvalue">{{selectedMediaTypeName}}</span>
+            </div>
+        </div>
+                    
+        <div class="mygrid-row">
+            <div class="mygrid-left">
+                <label>Media Source: </label>
+            </div>
+            <div class="mygrid-right">
+                <span class="spanvalue">{{selectedMediaSourceName}}</span>
+            </div>
+        </div>
+                
+        <div class="mygrid-row">
+            <div class="mygrid-left">
+                <label>Category: </label>
+            </div>
+            <div class="mygrid-right">
+                <span class="spanvalue">{{selectedCategoryName}}</span>
+            </div>
+        </div>
+                
+        <div class="mygrid-row">
+            <div class="mygrid-left">
+                <label>Reporter/Author: </label>
+            </div>
+            <div class="mygrid-right">
+                <span class="spanvalue">{{selectedReporterName}}</span>
+            </div>
+        </div>
+                
+        <div class="mygrid-row">
+            <div class="mygrid-left">
+                <label>Article Date: </label>
+            </div>
+            <div class="mygrid-right">
+                <span class="spanvalue">{{reply.articleDate | date:"MM/dd/yyyy"}}</span>
+            </div>
+        </div>
+                
+        <div class="mygrid-row">
+            <div class="mygrid-left">
+                <label>Title: </label>
+            </div>
+            <div class="mygrid-right">
+                <span class="spanvalue">{{reply.title}}</span>
+            </div>
+        </div>
+                
+        <div class="mygrid-row">
+            <div class="mygrid-left">
+                <label>Articel Subject: </label>
+            </div>
+            <div class="mygrid-right">
+                <span class="spanvalue">{{reply.subject}}</span>
+            </div>
+        </div>
+                
+        <div class="mygrid-row">
+            <div class="mygrid-left">
+                <label>Article URL: </label>
+            </div>
+            <div class="mygrid-right">
+                <span class="spanvalue">{{reply.articleURL}}</span>
+            </div>
+        </div>
+
+         <div class="mygrid-row">
+            <div class="mygrid-left">
+                <label>Article Rating: </label>
+            </div>
+            <div class="mygrid-right">
+                <span class="spanvalue">
+                <i id="thumbs" *ngIf="reply.articleThumbsUpDown == 0" class="fa my-thumbs-neutral"></i>
+                <i id="thumbs" *ngIf="reply.articleThumbsUpDown == 1" class="fa fa-thumbs-up"></i>
+                <i id="thumbs" *ngIf="reply.articleThumbsUpDown == -1" class="fa fa-thumbs-down"></i>
+                </span>
+            </div>
+        </div>
+    
+        <div class="mygrid-row">
+            <div class="mygrid-left">
+                <label>Reply: </label>
+            </div>
+            <div class="mygrid-right">
+                <span class="spanvalue">
+                <textarea id="textarea60pcnt" rows="20" readonly>{{reply.replyText}}</textarea>
+                </span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="mygrid-row-button">
+        <div class="mygrid-left-button">
+            <button type="submit" (click) = "buttonReturnClick()">Return to editing</button>
+        </div>
+        <div class="mygrid-right-button">
+            <button type="submit" (click) = "buttonSaveClick()">Confirm/Save</button>
+        </div>
+    </div>
+
+    <BR><BR>
+
+    <!-- Popup message modal -->
+    <div id="errormessage" name="errormessage" class="ui modal">
+        <img src="images/error.jpg" alt="error icon" class="error icon">
+        <div class="header">
+            <span style="color: red;">Reply Submit Error</span>
+        </div>
+        <div class="image content">
+            <div class="description">
+                There was an error submitting your reply.  Please contact us for details.
+            </div>
+        </div>
+    </div>
+
+    <div id="successmessage" name="successmessage" class="ui modal">
+        <img src="images/success.jpg" alt="success icon" class="success icon">
+        <div class="header">
+            <span style="color: green;">Reply Submit Success</span>
+        </div>
+        <div class="image content">
+            <div class="description">
+                Your reply was successfully submitted.
+            </div>
+        </div>
+    </div>
+
+</div>
+            
+

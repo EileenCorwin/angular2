@@ -1,0 +1,183 @@
+<form [formGroup]="replyForm" novalidate (ngSubmit)="replyForm.valid && submitForm(replyForm.value, replyForm.valid)">
+    <!-- Sidebar Selections -->
+    <div class="gridbox gridmenu">
+        <ul>
+            <div class="menuitem">
+            <li>
+                <label>Media Type: </label>
+                <select id="mediatype" name="mediatype" class="ui search dropdown" formControlName = "mediaTypeId"
+                        (ngModelChange)="onSelectType($event)">      
+                    <option value="">Please select a media type</option>
+                    <option *ngFor="let mediatype of mediatypes"
+                            value = {{mediatype.id}}>
+                        {{mediatype.mediaTypeName}}
+                    </option>
+                </select>  
+                <div>
+                <small class="errormsg" [hidden]="replyForm.controls.mediaTypeId.valid || (neversubmitted)">
+                    Media type required.
+                </small>
+                </div> 
+            </li>
+            </div>
+
+            <div class="menuitem">
+            <li>
+                <label>Media Source: </label>
+                <select id="mediasource" name="mediasource" class="ui search dropdown" formControlName = "mediaSourceId"
+                       (ngModelChange)="onSelectSource($event)">      
+                    <option value="">Please select a media source</option>
+                    <option *ngFor="let mediasource of mediasources"
+                        value = {{mediasource.id}}>
+                        {{mediasource.mediaSourceName}}
+                    </option>
+                </select> 
+
+                <div>
+                <small class="errormsg" [hidden]="replyForm.controls.mediaSourceId.valid || (neversubmitted)">
+                    Media source required.
+                </small>
+                </div>
+
+                <div [hidden]="(!otherMediaSource)">
+                    <input type="text" formControlName = "otherMediaSourceName" >
+                    <div>
+                        <small class="errormsg" [hidden]="replyForm.controls.otherMediaSourceName.valid || (neversubmitted)">
+                            <p *ngIf="replyForm.controls.otherMediaSourceName.hasError('noOtherMediaSource')">
+                                Media source name required.
+                            </p>
+                            <p *ngIf="replyForm.controls.otherMediaSourceName.hasError('tooshortOtherMediaSource')">
+                                Media source name must be at least 5 characters long.
+                            </p>
+                        </small>
+                    </div>
+                </div>  
+
+            </li>
+            </div>
+
+            <div class="menuitem">
+            <li>
+                <label>Category: </label>
+                <select id="category" name="category" class="ui search dropdown" formControlName = "categoryId"
+                        (ngModelChange)="onSelectCategory($event)">      
+                    <option value="">Please select a category</option>"
+                    <option *ngFor="let category of categories"
+                        value = {{category.id}}>
+                        {{category.categoryName}}
+                    </option>
+                </select>  
+
+                <div>
+                <small class="errormsg" [hidden]="replyForm.controls.categoryId.valid || (neversubmitted)">
+                    Category required.
+                </small>
+                </div>
+            </li>
+            </div>
+
+            <div class="menuitem">
+            <li>
+                <label>Reporter: </label>
+
+                <select id="reporter" name="reporter" class="ui search dropdown" formControlName = "reporterId"
+                        (ngModelChange)="onSelectReporter($event)">      
+                    <option value="">Please select a reporter</option>"
+                    <option *ngFor="let reporter of reporters"
+                        value = {{reporter.id}}>
+                        {{reporter.reporterName}}
+                    </option>
+                </select>
+                <div>
+                <small class="errormsg" [hidden]="replyForm.controls.reporterId.valid || (neversubmitted)">
+                    Reporter required.
+                </small>
+                </div>
+
+                <div [hidden]="(!otherReporter)">
+                    <input type="text" formControlName = "otherReporterName" >
+                    <div>
+                        <small class="errormsg" [hidden]="replyForm.controls.otherReporterName.valid || (neversubmitted)">
+                            <p *ngIf="replyForm.controls.otherReporterName.hasError('noOtherReporter')">
+                                Reporter name required.
+                            </p>
+                            <p *ngIf="replyForm.controls.otherReporterName.hasError('tooshortOtherReporter')">
+                                Reporter name must be at least 5 characters long.
+                            </p>
+                        </small>
+                    </div>
+                </div>  
+            </li>
+            </div>
+            
+            <div class="menuitem">
+            <li>
+                <label>Article Date: </label>
+                <p-calendar [maxDate]="maxDateValue" formControlName="articleDate" showIcon="true"></p-calendar>
+                
+                <div>
+                <small class="errormsg" [hidden]="replyForm.controls.articleDate.valid || (neversubmitted)">
+                    <p *ngIf="replyForm.controls.articleDate.hasError('required')">
+                        Valid date required.
+                    </p>
+                    <p *ngIf="replyForm.controls.articleDate.hasError('futureArticleDate')">
+                        Article date cannot be beyond today.
+                    </p>
+                </small>
+                </div>
+
+            </li>
+            </div>
+
+            <div class="menuitem">
+            <li>
+                <label>Rate Article (opt'l): </label>
+                <i id="thumbs" data-toggle="tooltip" title="Like/Dislike/Neutral" data-placement="right" 
+                    (click)="thumbsClick('thumbs')" class="fa my-thumbs-neutral"></i>
+            </li>
+            </div>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="gridbox gridmain">
+        <div class="main">
+            <div>
+            <label>Article Title: </label>      
+            <input id="articletitle" type="text" value = {{replyForm.controls.title.value}} formControlName="title">
+            <small class="errormsg" [hidden]="replyForm.controls.title.valid || (neversubmitted)">
+                Title required (minimum 5 characters).
+            </small>
+            </div>
+
+            <div>
+            <label>Article Subject: </label>      
+            <input id="articlesubject" type="text" value = {{replyForm.controls.subject.value}} formControlName="subject">
+            <small class="errormsg" [hidden]="replyForm.controls.subject.valid || (neversubmitted)">
+                Subject required (minimum 5 characters).
+            </small>
+            </div>
+
+            <div>
+            <label>Article URL (opt'l): </label>      
+            <input id="articleurl" type="text" value = {{replyForm.controls.articleURL.value}} formControlName="articleURL">
+            <small class="errormsg" [hidden]="replyForm.controls.articleURL.valid || (neversubmitted)">
+                URL required (minimum 5 characters).
+            </small>
+            </div>
+
+            <div>
+            <label>Your Reply: </label>
+            <textarea rows="20" value = {{replyForm.controls.replyText.value}} formControlName="replyText"></textarea>
+            <small class="errormsg" [hidden]="replyForm.controls.replyText.valid || (neversubmitted)">
+                Reply text required (minimum 5 characters).
+            </small>
+            </div>
+
+            <button type="submit" (click) = "buttonClick()">Submit</button>
+        </div>
+    </div>
+
+</form>
+
+

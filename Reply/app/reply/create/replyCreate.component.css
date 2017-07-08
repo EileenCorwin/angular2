@@ -1,0 +1,11 @@
+#articletitle, #articlesubject, #articleurl{
+    width: 80%;
+}
+
+.fa {
+    font-size:24px;
+}
+
+.fa:hover {
+  color: darkblue;
+}

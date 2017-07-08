@@ -1,0 +1,34 @@
+<div class="gridcontainer">
+
+    <!-- Header -->
+    <div class="gridheader">
+        <div class="header">
+            <my-header (setVisibleComponent)="setVisibleComponent($event)"></my-header>
+        </div>
+    </div>
+        
+    <!-- Main Content -->
+    <div id="mainContent" *ngIf="visibleComponent === 'main'">
+        <my-carousel></my-carousel> 
+    </div>
+
+    <div id="mainContent" *ngIf="visibleComponent === 'list'">
+        <my-list (setVisibleComponent)="setVisibleComponent($event)"></my-list> 
+    </div>
+
+    <div id="mainContent" *ngIf="visibleComponent === 'create'">
+        <my-create (setVisibleComponent)="setVisibleComponent($event)"></my-create> 
+    </div>
+    
+    <div id="mainContent" *ngIf="visibleComponent === 'confirm'">
+        <my-confirm (setVisibleComponent)="setVisibleComponent($event)"></my-confirm> 
+    </div>
+
+    <!-- Footer -->
+    <div class="gridbox gridfooter">
+        <div class="footer">
+            <my-footer></my-footer>
+        </div>
+    </div>
+
+</div>

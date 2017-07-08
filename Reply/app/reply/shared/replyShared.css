@@ -1,0 +1,216 @@
+/* Eileen's */
+body {margin: 0;}
+
+ul {
+    margin: 0; 
+    padding: 0;
+    list-style: none;
+}
+
+label {
+    font-weight: bold;
+}
+
+/* needed for responsive textarea */
+textarea {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    overflow-y: scroll; 
+    resize: none;
+
+    width: 100%;
+}
+
+button {
+    background-color: #2399e5;
+    color: white;
+}
+
+.fa-thumbs-down{
+    color:red;   
+}
+
+.fa-thumbs-up{
+    color:green;   
+}
+
+.my-thumbs-neutral:before {
+    content: "\f165";
+}
+.my-thumbs-neutral {
+    -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=3)";
+    -webkit-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+    transform: rotate(270deg);
+}
+/* end Eileen's */
+
+
+/* W3School The Pulpit Rock template */
+.main img {
+    width: 100%;
+}
+
+.header {
+    background-color: pink;
+}
+
+.menuitem {
+    padding: 3% 0%;
+    border-bottom: none;
+    cursor: pointer;
+}
+
+.main {
+    padding: 2.0661157024793388429752066115702%;
+}
+
+.footer {
+    text-align: center;
+    font-size: 0.625em;
+}
+
+.gridcontainer {
+    width: 100%;
+}
+
+.gridwrapper {
+    overflow: hidden;
+}
+
+.gridbox {
+    float: left;
+}
+
+.gridheader {
+    width: 100%;
+}
+
+.gridmenu {
+    width: 35%;
+    background-color: #fffae6;
+}
+
+.gridmain {
+    width: 60%;
+}
+
+.gridfooter {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+/*@media only screen and (max-width: 500px) {*/
+@media only screen and (max-width: 800px) { /*iPhone 5 horizontal is 568px*/
+    .gridmenu {
+        width: 100%;
+    }
+
+    .menuitem {
+        padding: 1.0121457489878542510121457489879%;
+    }
+
+    .gridmain {
+        width: 100%;
+    }
+
+    .main {
+        padding: 1.0121457489878542510121457489879%;
+    }
+
+    .gridright {
+        width: 100%;
+    }
+
+    .right {
+        padding: 1.0121457489878542510121457489879%;
+    }
+
+    .gridbox {
+        margin-right: 0;
+        /*float: left;*/
+    }
+
+    /* my addition */
+    label, select, input, textarea, .autocomplete {
+        display: block;
+        width: 100%;
+    }
+}
+/* end W3School The Pulpit Rock template */
+
+/*************************/
+/* Semantic UI dropdowns */
+/*************************/
+/* changing the height of the dd box */
+.ui.selection.dropdown {
+    min-height: 22px; /* from 2.71428571em (38px) */
+    padding-top: 2px; /* from 0.785714em (11px) */
+    padding-bottom: 2px; /* from 0.785714em (11px) */
+    padding-left: 4px; /* from 1em (14px) */
+}
+/* changing the height location of the dd icon since changing the height of the dd itself */
+.ui.selection.dropdown > .dropdown.icon {
+    top: 4px; /* from 0.78571429em */
+}
+/* changing the line heights of the menu items */
+.ui.dropdown .menu > .item {
+    padding-top: 2px; /* from 0.785714em (11px) */
+    padding-bottom: 2px; /* from 0.785714em (11px) */
+    padding-left: 12px; /* from 1.14286rem (16px) */
+}
+
+.ui.selection.dropdown .menu > .item {
+    padding-top: 2px !important; /* from 0.785714em (11px) */
+    padding-bottom: 2px !important; /* from 0.785714em (11px) */
+    padding-left: 12px !important; /* from 1.14286rem (16px) */
+}
+
+/* changing the height of the multi select search dd box */
+.ui.multiple.search.dropdown > input.search {
+    margin: 0; /* from 0.45238095em 0em 0.45238095em 0.64285714em */
+}
+/* slightly changing the height of the multi select dd with selections */
+.ui.multiple.dropdown > .label {
+    margin: 0; /* from 0.14285714rem 0.28571429rem 0.14285714rem 0em */
+    margin-right: 4px;
+    padding: 2px 4px; /* from 0.35714286em 0.78571429em */
+}
+/* changing the width of the multi select search dd box */
+.ui.fluid.dropdown {
+    display: inline-block; /* from display: block */
+    width: 0; /* from width: 100% */
+    min-width: 14em; /* from min-width: 0em */
+}
+
+.ui.search.selection.dropdown > input.search {
+  padding: 0; /* from 0.67857143em 2.1em 0.67857143em 1em */
+}
+
+/******************************/
+/* Prim NG calendar overrides */
+/******************************/
+.ui-inputtext {
+    padding-top: 2px; /* from .25em */
+    padding-bottom: 1px; /* from .25em */
+    padding-left: 4px; /* from .25em */
+}
+
+.ui-calendar.ui-calendar-w-btn input {
+    width: 100px; /*set width of the textbox*/
+}
+/******************************/
+
+
+/* !!! To change height of semantice dropdowns so won't truncate at bottom, remember @media sizes */
+/*.ui.selection.dropdown .menu {
+    max-height: 10.68571429rem;
+}*/
+
+.errormsg {
+    color: red;
+}
+
+

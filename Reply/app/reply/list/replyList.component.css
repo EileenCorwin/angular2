@@ -1,0 +1,65 @@
+.divRight{
+    display: inline; 
+    float: right;
+}
+
+.divLeft{
+    display: inline;
+}
+
+.replyLabel {
+    color: #cccccc;
+}
+
+.replyValue {
+    color: green;
+}
+
+.btn-default {
+    color: white;
+    background-color: #2399e5;
+}
+
+@media (max-width: 767px) {
+  .navbar-inverse .navbar-nav > li > a {
+    font-size: 14px;
+    line-height: 5px;
+  }
+
+  .divRight, .divLeft {
+      width: 100%;
+      display: block;
+      float: none;
+      
+  }
+}
+
+/* PrimeNG Accordian Overrides */
+/* NOTE: must put sytlesheet link in body of index.html (so it loads after PrimeNG stylesheet */
+.ui-accordion .ui-accordion-header a {
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.ui-accordion .ui-accordion-header:not(.ui-state-active):not(.ui-state-disabled):hover a {
+    color: blue;
+}
+
+.ui-widget-header .ui-state-active a, .ui-widget-content .ui-state-active a, .ui-state-active a {
+    color: blue!important;
+    font-style: italic;
+
+    background-color: #fffae6;
+}
+
+.ui-accordion .ui-accordion-content {
+    background-color: #fffae6;
+}
+
+/* PrimeNG AutoComplete Overrides */
+/* NOTE: must put sytlesheet link in body of index.html (so it loads after PrimeNG stylesheet */
+.ui-state-disabled, .ui-widget:disabled {
+    opacity: 1;
+}
+
+/* end - PrimeNG AutoComplete Overrides */

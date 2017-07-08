@@ -1,0 +1,209 @@
+<form [formGroup]="selectionForm" novalidate (ngSubmit)="selectionForm.valid && submitForm(selectionForm.value, selectionForm.valid)">
+
+    <!-- Sidebar Selections -->
+    <div class="gridbox gridmenu">
+
+        <!-- Search Button -->
+        <div style="float: right">
+            <button type="submit" (click) = "buttonClick()">
+                <span class="glyphicon glyphicon-search"></span> 
+            </button>
+        </div>
+
+        <ul>
+            <div class="menuitem">
+            <li>
+                <label>Media Type: </label>             
+                <select id="mediatype" name="mediatype" multiple="" class="ui search dropdown" 
+                        formControlName = "mediaTypeId"
+                        (ngModelChange)="onSelectType($event)">      
+                    <option *ngFor="let mediatype of mediatypes"
+                         value = {{mediatype.id}}>
+                        {{mediatype.mediaTypeName}}
+                    </option>
+                </select> 
+            </li>
+            </div>
+
+            <div class="menuitem">
+            <li>
+                <label>Media Source: </label>
+                <select id="mediasource" name="mediasource" class="ui fluid search dropdown" multiple=""  
+                        formControlName = "mediaSourceId"
+                        (ngModelChange)="onSelectSource($event)">      
+                    <option *ngFor="let mediasource of mediasources"
+                         value = {{mediasource.id}}>
+                        {{mediasource.mediaSourceName}}
+                    </option>
+                </select>
+            </li>
+            </div>
+
+            <div class="menuitem">
+            <li>
+                <label>Category: </label>
+                <select id="cateogry" name="cateogry" multiple="" class="ui search dropdown" 
+                        formControlName = "categoryId"
+                        (ngModelChange)="onSelectCatergory($event)"
+                        > 
+                    <option *ngFor="let category of categories"
+                         value = {{category.id}}>
+                        {{category.categoryName}}
+                    </option>
+                </select>
+            </li>
+            </div>
+
+            <div class="menuitem">
+            <li>
+                <label>Reporter: </label>
+                <select id="reporter" name="reporter" multiple="" class="ui search dropdown"
+                        formControlName = "reporterId"
+                        (ngModelChange)="onSelectReporter($event)"               
+                        >
+                    <option *ngFor="let reporter of reporters"
+                         value = {{reporter.id}}>
+                        {{reporter.reporterName}}
+                    </option>
+                </select>            
+            </li>
+            </div>
+            
+            <div class="menuitem">
+            <li>
+                <label>Article Date Range: </label>
+                <p-calendar name="articleDateFrom" required [maxDate]="maxDateValue" formControlName = "articleDateFrom" showIcon="true"></p-calendar>
+                <div>
+                    <small class="errormsg" [hidden]="selectionForm.controls.articleDateFrom.valid || (neversubmitted)">
+                        From date required.
+                    </small>
+                </div>
+             </li>
+            </div>
+            <div class="menuitem">
+            <li>
+                <label> to </label>
+                <p-calendar name="articleDateTo" required [maxDate]="maxDateValue" formControlName = "articleDateTo" showIcon="true"></p-calendar>
+                
+                <div>
+                <small class="errormsg" [hidden]="selectionForm.controls.articleDateTo.valid || (neversubmitted)">
+                    <p *ngIf="selectionForm.controls.articleDateTo.hasError('required')">
+                        To date required.
+                    </p>
+                    <p *ngIf="selectionForm.controls.articleDateTo.hasError('articleDateRangeInvalid')">
+                        To date cannot be before from date.
+                    </p>
+                </small>
+                </div>
+
+            </li>
+            </div>
+ 
+            <div class="menuitem">
+            <li>
+                <label>Article Title: </label>
+                <input type="text" name="title" formControlName = "title">
+            </li>
+            </div>
+ 
+            <div class="menuitem">
+            <li>
+                <label>Subject: </label>
+                <input type="text" name="subject" formControlName = "subject">
+            </li>
+            </div>
+ 
+            <div class="menuitem">
+            <li>
+                <label>Replier: </label>
+                <select id="replier" name="replier" multiple="" class="ui search dropdown"
+                        formControlName = "replierId"
+                        (ngModelChange)="onSelectReplier($event)"
+                        >
+                    <option *ngFor="let replier of repliers"
+                         value = {{replier.id}}>
+                        {{replier.replierName}}
+                    </option>
+                </select>            
+            </li>
+            </div>
+
+        </ul>
+
+        <!-- Search Button -->
+        <div style="float: right">
+            <button type="submit" (click) = "buttonClick()">
+                <span class="glyphicon glyphicon-search"></span> 
+            </button>
+        </div>
+    </div>
+</form>
+
+    <!-- Main Content -->
+    <div class="gridbox gridmain">
+        <div class="main">
+            <!-- Basic Messages -->
+            <div *ngIf="(neversubmitted)" style="text-align: center">
+                Please make search selections
+            </div>
+
+            <div *ngIf="(!selectionForm.valid || daterangeinvalid) && !neversubmitted" style="text-align: center">
+                Please fix required fields before submitting
+            </div>
+
+            <div *ngIf="replies == 0 && selectionForm.valid && submitted" style="text-align: center">
+                No replies based on search criteria
+            </div>
+            <!-- end - Basic Messages -->
+
+            <div *ngIf="replies != 0 && selectionForm.valid && submitted && !daterangeinvalid && selections.articleDateFrom <= selections.articleDateTo">
+            <p-accordion>
+                <div *ngFor="let reply of replies">
+                    <div>
+                        <!-- Header row 1 -->
+                        <div class="divLeft">
+                            <span class="replyLabel">reply by </span> 
+                            <span class="replyValue">{{reply.replierName}}</span>
+                            <span class="replyLabel">on </span> 
+                            <span class="replyValue">{{reply.replyDate.substr(0, 10) | date:"MM/dd/yyyy"}}</span>
+                            <i *ngIf="reply.articleThumbsUpDown == -1" class="fa fa-thumbs-down"></i>
+                            <i *ngIf="reply.articleThumbsUpDown == 1" class="fa fa-thumbs-up"></i>
+                        </div>
+                    
+                        <div class="divRight">
+                            <span class="replyValue">{{reply.mediaTypeName}} / {{reply.mediaSourceName}} / {{reply.categoryName}}</span> 
+                        </div>
+                    </div>
+
+                    <!-- Header row 2 -->
+                    <div>   
+                        <div class="divLeft">
+                            <span class="replyLabel">article by </span> 
+                            <span class="replyValue">{{reply.reporterName}}</span>
+                            <span class="replyLabel">on </span> 
+                            <span class="replyValue">{{reply.articleDate.substr(0, 10) | date:"MM/dd/yyyy"}}</span>
+                        </div>   
+                    
+                        <div class="divRight">
+                            <span class="replyValue">{{reply.subject}}</span> 
+                        </div>
+                    </div>
+                    
+                    <!-- actual accordion -->
+                    <p-accordionTab>
+                        <p-header>
+                            {{reply.title}}
+                        </p-header>
+                        <div style="float:right">
+                        <button type="submit" (click)="onSelectReply(reply.replyId)">Add your reply to this article</button>
+                        </div>
+                        <BR>
+                        {{reply.replyText}}    
+                    </p-accordionTab>
+
+                    <BR>
+                </div>
+            </p-accordion>
+            </div>
+        </div>
+    </div>
